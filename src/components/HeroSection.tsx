@@ -1,4 +1,4 @@
-import { ImageWithFallback } from './figma/ImageWithFallback';
+
 
 interface HeroSectionProps {
   setActiveSection: (section: string) => void;

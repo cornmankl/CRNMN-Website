@@ -25,7 +25,6 @@ export function CartSheet({
   onOpenChange, 
   items, 
   updateItem, 
-  removeItem,
   total, 
   clearCart,
   setActiveOrder 

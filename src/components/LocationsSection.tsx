@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export function LocationsSection() {
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  
 
   const locations = [
     {

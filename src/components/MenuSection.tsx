@@ -54,7 +54,6 @@ export function MenuSection({ addToCart, isAdmin = false }: MenuSectionProps) {
       name: 'Spicy Jalapeño Corn',
       description: 'Corn with a spicy jalapeño kick',
       price: 'RM 8.90',
-      badge: null,
       category: 'spicy',
       image: null
     },
@@ -72,7 +71,6 @@ export function MenuSection({ addToCart, isAdmin = false }: MenuSectionProps) {
       name: 'Mexican Street Corn',
       description: 'Authentic elote with chili powder and lime',
       price: 'RM 9.90',
-      badge: null,
       category: 'international',
       image: null
     },
@@ -263,7 +261,7 @@ export function MenuSection({ addToCart, isAdmin = false }: MenuSectionProps) {
               {editingItem === item.id ? (
                 <div className="p-5">
                   <FirebaseImageUpload
-                    onImageUpload={(url) => handleImageUpload(item.id, url)}
+                    onImageUpload={(url: string) => handleImageUpload(item.id, url)}
                     currentImage={editForm.image || undefined}
                     className="mb-4"
                     folder="menu-images"

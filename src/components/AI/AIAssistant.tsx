@@ -4,7 +4,7 @@ import { Input } from '../ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { Separator } from '../ui/separator';
+
 import { 
   Bot, 
   User, 
@@ -63,7 +63,6 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
     chatHistory, 
     addChatMessage, 
     setAILoading, 
-    isAILoading,
     userPreferences 
   } = useAIStore();
 

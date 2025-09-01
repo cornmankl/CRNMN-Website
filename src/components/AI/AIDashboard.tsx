@@ -10,7 +10,7 @@ import {
   Wand2, 
   TestTube,
   BarChart3,
-  Users,
+  
   Zap
 } from 'lucide-react';
 import { AIAssistant } from './AIAssistant';

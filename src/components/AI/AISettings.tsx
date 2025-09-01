@@ -9,7 +9,7 @@ import {
   Settings, 
   Brain, 
   Globe, 
-  Palette, 
+   
   Zap, 
   Shield,
   Save,

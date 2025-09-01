@@ -5,7 +5,7 @@ import { Badge } from '../ui/badge';
 import { Textarea } from '../ui/textarea';
 import { 
   Sparkles, 
-  Image, 
+   
   FileText, 
   Code, 
   Brain,

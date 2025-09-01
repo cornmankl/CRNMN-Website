@@ -7,11 +7,7 @@ interface LoadingProps {
   width?: string;
 }
 
-interface LazyComponentProps {
-  fallback?: React.ComponentType<LoadingProps>;
-  loadingProps?: LoadingProps;
-  [key: string]: any;
-}
+
 
 // Default loading component
 const DefaultLoading: React.FC<LoadingProps> = ({ 

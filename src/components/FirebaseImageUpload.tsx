@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import * as React from 'react';
+import { useState, useRef } from 'react';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../utils/firebase/config';
 
 interface FirebaseImageUploadProps {
   onImageUpload: (imageUrl: string) => void;
-  currentImage?: string;
+  currentImage?: string | null;
   className?: string;
   folder?: string;
 }
@@ -60,7 +61,7 @@ export const FirebaseImageUpload: React.FC<FirebaseImageUploadProps> = ({
       const uploadTask = uploadBytes(storageRef, file);
       
       // Listen for upload progress
-      uploadTask.then((snapshot) => {
+      uploadTask.then(() => {
         setProgress(100);
         
         // Get download URL

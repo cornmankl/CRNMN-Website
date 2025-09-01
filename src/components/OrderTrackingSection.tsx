@@ -22,7 +22,7 @@ export function OrderTrackingSection() {
           <div className="absolute left-0 top-1/2 w-full h-0.5 bg-[var(--neutral-700)]"></div>
           <div className="absolute left-0 top-1/2 w-2/3 h-0.5 neon-bg"></div>
           <div className="flex justify-between items-center text-center">
-            {trackingSteps.map((step, index) => (
+            {trackingSteps.map((step) => (
               <div key={step.id} className="z-10">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center mx-auto ${
                   step.completed || step.active 

@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { 
   Image, 
   Download, 
-  RefreshCw, 
+   
   Sparkles, 
   Loader2,
   Copy,

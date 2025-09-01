@@ -359,7 +359,7 @@ export const useAIAuth = () => {
     initAuth();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         const authenticatedUser = await aiAuth.authenticateUser();
         setUser(authenticatedUser);

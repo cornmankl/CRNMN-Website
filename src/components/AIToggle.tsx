@@ -5,7 +5,7 @@ import {
   Bot, 
   Sparkles, 
   MessageCircle,
-  Zap,
+  
   Loader2
 } from 'lucide-react';
 import { AIAssistant } from './AI/AIAssistant';

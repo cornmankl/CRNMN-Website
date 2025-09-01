@@ -24,7 +24,7 @@ app.post('/make-server-81d654e2/signup', async (c) => {
   try {
     const { email, password, name, phone, address } = await c.req.json()
     
-    const { data, error } = await supabase.auth.admin.createUser({
+    const { data } = await supabase.auth.admin.createUser({
       email,
       password,
       user_metadata: { name, phone, address },
@@ -58,7 +58,7 @@ app.post('/make-server-81d654e2/signup', async (c) => {
 app.get('/make-server-81d654e2/profile', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1]
-    const { data: { user }, error } = await supabase.auth.getUser(accessToken)
+    const { data: { user } } = await supabase.auth.getUser(accessToken)
     
     if (!user?.id) {
       return c.json({ error: 'Unauthorized' }, 401)
@@ -76,7 +76,7 @@ app.get('/make-server-81d654e2/profile', async (c) => {
 app.post('/make-server-81d654e2/orders', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1]
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken)
+    const { data: { user }, error: _ } = await supabase.auth.getUser(accessToken)
     
     if (!user?.id) {
       return c.json({ error: 'Unauthorized' }, 401)
@@ -145,7 +145,7 @@ app.post('/make-server-81d654e2/orders', async (c) => {
 app.get('/make-server-81d654e2/orders/:orderId', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1]
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken)
+    const { data: { user }, error: _ } = await supabase.auth.getUser(accessToken)
     
     if (!user?.id) {
       return c.json({ error: 'Unauthorized' }, 401)
@@ -169,7 +169,7 @@ app.get('/make-server-81d654e2/orders/:orderId', async (c) => {
 app.get('/make-server-81d654e2/orders', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1]
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken)
+    const { data: { user }, error: _ } = await supabase.auth.getUser(accessToken)
     
     if (!user?.id) {
       return c.json({ error: 'Unauthorized' }, 401)
@@ -190,7 +190,7 @@ app.get('/make-server-81d654e2/orders', async (c) => {
 // Calculate delivery estimate based on location
 app.post('/make-server-81d654e2/delivery-estimate', async (c) => {
   try {
-    const { latitude, longitude, address } = await c.req.json()
+    const {} = await c.req.json()
     
     // Mock delivery estimate calculation
     // In real app, you'd use actual distance calculation and traffic data
@@ -215,13 +215,13 @@ app.post('/make-server-81d654e2/delivery-estimate', async (c) => {
 app.post('/make-server-81d654e2/process-payment', async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1]
-    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken)
+    const { data: { user }, error: _ } = await supabase.auth.getUser(accessToken)
     
     if (!user?.id) {
       return c.json({ error: 'Unauthorized' }, 401)
     }
 
-    const { amount, paymentMethod, cardDetails } = await c.req.json()
+    const { amount, paymentMethod } = await c.req.json()
     
     // Mock payment processing
     // In real app, integrate with Stripe, PayPal, etc.

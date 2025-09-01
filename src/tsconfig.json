@@ -32,5 +32,25 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "babel__core",
+    "babel__generator",
+    "babel__template",
+    "babel__traverse",
+    "estree",
+    "estree-jsx",
+    "hast",
+    "mdast",
+    "node",
+    "offscreencanvas",
+    "phoenix",
+    "sinonjs__fake-timers",
+    "sizzle",
+    "trusted-types",
+    "unist",
+    "webxr"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

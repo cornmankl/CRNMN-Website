@@ -59,8 +59,8 @@ interface OrderItem {
 
 export default function App() {
   // Zustand stores
-  const { items, isOpen, addItem, removeItem, updateQuantity, clearCart, toggleCart, setCartOpen, getTotal, getItemCount } = useCartStore();
-  const { user, isAuthenticated, setUser, clearUser } = useUserStore();
+  const { items, isOpen, addItem, removeItem, updateQuantity, clearCart, setCartOpen, getTotal, getItemCount } = useCartStore();
+  const { user, setUser, clearUser } = useUserStore();
   const { activeOrder, setActiveOrder } = useOrdersStore();
   const { activeSection, setActiveSection, addNotification } = useUIStore();
 

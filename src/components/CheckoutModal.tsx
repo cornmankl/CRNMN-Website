@@ -33,7 +33,7 @@ export function CheckoutModal({ isOpen, onClose, onSuccess }) {
         handleClose()
       }, 3000)
 
-    } catch (error) {
+    } catch (e) {
       alert('Order failed')
     } finally {
       setIsProcessing(false)
