@@ -4,7 +4,9 @@
   import path from 'path';
 
   export default defineConfig({
-    plugins: [react()],
+    plugins: [react({
+    jsxRuntime: 'automatic'
+  })],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {

@@ -50,10 +50,10 @@ export class AIService {
 
   constructor() {
     this.config = {
-      openaiApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-      anthropicApiKey: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY,
-      glmApiKey: process.env.NEXT_PUBLIC_GLM_API_KEY,
-      geminiApiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
+      openaiApiKey: import.meta.env.VITE_OPENAI_API_KEY,
+      anthropicApiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
+      glmApiKey: import.meta.env.VITE_GLM_API_KEY,
+      geminiApiKey: import.meta.env.VITE_GEMINI_API_KEY,
       defaultModel: 'gemini-pro',
       maxTokens: 2000,
       temperature: 0.7
