@@ -340,6 +340,8 @@ Respond in JSON format with the analysis.`;
   }
 }
 
+import React, { useState, useEffect } from 'react';
+
 // React hook for website modification
 export const useWebsiteModifier = () => {
   const [modifier] = useState(() => new WebsiteModifier());

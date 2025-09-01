@@ -340,6 +340,8 @@ export class AIAuthService {
   }
 }
 
+import React from 'react';
+
 // Hook for using AI Auth
 export const useAIAuth = () => {
   const [user, setUser] = React.useState<AIUser | null>(null);

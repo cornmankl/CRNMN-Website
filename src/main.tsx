@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { QueryProvider } from "./providers/QueryProvider";
 import { ThemeProvider } from "next-themes";
+import "./react-global";
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component<
