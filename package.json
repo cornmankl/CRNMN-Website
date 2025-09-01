@@ -97,7 +97,7 @@
     "tailwind-merge": "^2.2.0",
     "three": "^0.170.0",
     "vaul": "^1.1.2",
-    "vite": "^5.4.19",
+    "vite": "^7.1.4",
     "web-vitals": "^4.2.4",
     "web3": "^4.16.0",
     "workbox-expiration": "^7.3.0",
@@ -144,8 +144,7 @@
     "typescript": "^5.3.3",
     "vite-bundle-analyzer": "^0.7.0",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-imagemin": "^0.6.1",
-    "vite-plugin-pwa": "^0.20.5"
+    "vite-plugin-pwa": "^1.0.3"
   },
   "overrides": {
     "rollup": "^4.50.0"
