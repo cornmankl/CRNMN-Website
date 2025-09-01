@@ -1,50 +1,48 @@
 import React, { useEffect, useState } from 'react';
 
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[];
-  readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
-    platform: string;
-  }>;
-  prompt(): Promise<void>;
-}
+// interface BeforeInstallPromptEvent extends Event {
+//   readonly platforms: string[];
+//   readonly userChoice: Promise<{
+//     outcome: 'accepted' | 'dismissed';
+//     platform: string;
+//   }>;
+//   prompt(): Promise<void>;
+// }
 
 export const PWARegistration: React.FC = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [serviceWorkerStatus, setServiceWorkerStatus] = useState<'unsupported' | 'registering' | 'registered' | 'error'>('unsupported');
+  // const [isOnline, setIsOnline] = useState(navigator.onLine); // isOnline is not used
+  // const [serviceWorkerStatus, setServiceWorkerStatus] = useState<'unsupported' | 'registering' | 'registered' | 'error'>('unsupported'); // serviceWorkerStatus is not used
 
   useEffect(() => {
     // Check if app is already installed
     const checkIfInstalled = () => {
-      const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches ||
-                                (window.navigator as any).standalone === true;
-      setIsInstalled(isInStandaloneMode);
+      // const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || // isInStandaloneMode is not used
+      //                           (window.navigator as any).standalone === true;
+      // setIsInstalled(isInStandaloneMode); // isInstalled is not used
     };
 
     // Handle install prompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      const promptEvent = e as BeforeInstallPromptEvent;
-      setDeferredPrompt(promptEvent);
+      // const promptEvent = e as BeforeInstallPromptEvent; // promptEvent is not used
+      // setDeferredPrompt(promptEvent); // deferredPrompt is not used
     };
 
     // Handle app installed
     const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setDeferredPrompt(null);
+      // setIsInstalled(true); // isInstalled is not used
+      // setDeferredPrompt(null); // deferredPrompt is not used
     };
 
     // Handle online/offline status
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+    // const handleOnline = () => setIsOnline(true); // isOnline is not used
+    // const handleOffline = () => setIsOnline(false); // isOnline is not used
 
     // Register event listeners
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    // window.addEventListener('online', handleOnline); // isOnline is not used
+    // window.addEventListener('offline', handleOffline); // isOnline is not used
 
     // Check initial installation status
     checkIfInstalled();
@@ -53,14 +51,14 @@ export const PWARegistration: React.FC = () => {
     const registerServiceWorker = async () => {
       if ('serviceWorker' in navigator) {
         try {
-          setServiceWorkerStatus('registering');
+          // setServiceWorkerStatus('registering'); // serviceWorkerStatus is not used
           
           const registration = await navigator.serviceWorker.register('/sw.js', {
             scope: '/'
           });
           
           console.log('Service Worker registered successfully:', registration);
-          setServiceWorkerStatus('registered');
+          // setServiceWorkerStatus('registered'); // serviceWorkerStatus is not used
           
           // Check for updates
           registration.addEventListener('updatefound', () => {
@@ -85,11 +83,11 @@ export const PWARegistration: React.FC = () => {
           
         } catch (error) {
           console.error('Service Worker registration failed:', error);
-          setServiceWorkerStatus('error');
+          // setServiceWorkerStatus('error'); // serviceWorkerStatus is not used
         }
       } else {
         console.log('Service Worker is not supported');
-        setServiceWorkerStatus('unsupported');
+        // setServiceWorkerStatus('unsupported'); // serviceWorkerStatus is not used
       }
     };
 
@@ -99,29 +97,29 @@ export const PWARegistration: React.FC = () => {
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      // window.removeEventListener('online', handleOnline); // isOnline is not used
+      // window.removeEventListener('offline', handleOffline); // isOnline is not used
     };
   }, []);
 
-  const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      try {
-        await deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
+  // const handleInstallClick = async () => { // handleInstallClick is not used
+  //   if (deferredPrompt) { // deferredPrompt is not used
+  //     try {
+  //       await deferredPrompt.prompt(); // deferredPrompt is not used
+  //       const { outcome } = await deferredPrompt.userChoice; // deferredPrompt is not used
         
-        if (outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
+  //       if (outcome === 'accepted') {
+  //         console.log('User accepted the install prompt');
+  //       } else {
+  //         console.log('User dismissed the install prompt');
+  //       }
         
-        setDeferredPrompt(null);
-      } catch (error) {
-        console.error('Error during install prompt:', error);
-      }
-    }
-  };
+  //       // setDeferredPrompt(null); // deferredPrompt is not used
+  //     } catch (error) {
+  //       console.error('Error during install prompt:', error);
+  //     }
+  //   }
+  // };
 
   const showUpdateNotification = () => {
     if ('Notification' in window && Notification.permission === 'granted') {
@@ -134,55 +132,55 @@ export const PWARegistration: React.FC = () => {
     }
   };
 
-  const requestNotificationPermission = async () => {
-    if ('Notification' in window) {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        console.log('Notification permission granted');
-        // Subscribe to push notifications
-        subscribeToPushNotifications();
-      }
-    }
-  };
+  // const requestNotificationPermission = async () => { // requestNotificationPermission is not used
+  //   if ('Notification' in window) {
+  //     const permission = await Notification.requestPermission();
+  //     if (permission === 'granted') {
+  //       console.log('Notification permission granted');
+  //       // Subscribe to push notifications
+  //       subscribeToPushNotifications();
+  //     }
+  //   }
+  // };
 
-  const subscribeToPushNotifications = async () => {
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      try {
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY')
-        });
+  // const subscribeToPushNotifications = async () => {
+  //   if ('serviceWorker' in navigator && 'PushManager' in window) {
+  //     try {
+  //       const registration = await navigator.serviceWorker.ready;
+  //       const subscription = await registration.pushManager.subscribe({
+  //         userVisibleOnly: true,
+  //         applicationServerKey: urlBase64ToUint8Array('YOUR_VAPID_PUBLIC_KEY')
+  //       });
         
-        console.log('Push notification subscription:', subscription);
-        // Send subscription to server
-        await sendSubscriptionToServer(subscription);
-      } catch (error) {
-        console.error('Failed to subscribe to push notifications:', error);
-      }
-    }
-  };
+  //       console.log('Push notification subscription:', subscription);
+  //       // Send subscription to server
+  //       await sendSubscriptionToServer(subscription);
+  //     } catch (error) {
+  //       console.error('Failed to subscribe to push notifications:', error);
+  //     }
+  //   }
+  // };
 
-  const urlBase64ToUint8Array = (base64String: string): Uint8Array => {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
+  // const urlBase64ToUint8Array = (base64String: string): Uint8Array => {
+  //   const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  //   const base64 = (base64String + padding)
+  //     .replace(/-/g, '+')
+  //     .replace(/_/g, '/');
     
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
+  //   const rawData = window.atob(base64);
+  //   const outputArray = new Uint8Array(rawData.length);
     
-    for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
-    }
+  //   for (let i = 0; i < rawData.length; ++i) {
+  //     outputArray[i] = rawData.charCodeAt(i);
+  //   }
     
-    return outputArray;
-  };
+  //   return outputArray;
+  // };
 
-  const sendSubscriptionToServer = async (subscription: PushSubscription) => {
-    // Implement sending subscription to your server
-    console.log('Sending subscription to server:', subscription);
-  };
+  // const sendSubscriptionToServer = async (subscription: PushSubscription) => {
+  //   // Implement sending subscription to your server
+  //   console.log('Sending subscription to server:', subscription);
+  // };
 
   // This component doesn't render anything visible
   return null;
