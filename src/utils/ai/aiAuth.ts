@@ -1,3 +1,4 @@
+import React from 'react';
 import { supabase } from '../supabase/client';
 import { useUserStore } from '../../store';
 
