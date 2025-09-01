@@ -132,7 +132,7 @@ export default function App() {
       case 'home':
         return <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />;
       case 'menu':
-        return <MenuSection addToCart={handleAddToCart} />;
+        return <MenuSection addToCart={handleAddToCart} isAdmin={user?.role === 'admin'} />;
       case 'tracking':
         return <OrderTrackingSection />;
       case 'locations':
