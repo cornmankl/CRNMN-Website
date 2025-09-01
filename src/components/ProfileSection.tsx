@@ -1,19 +1,27 @@
-export function ProfileSection() {
+import { User } from '../App';
+
+interface ProfileSectionProps {
+  user: User | null;
+  onLogout: () => void;
+}
+
+export function ProfileSection({ user, onLogout }: ProfileSectionProps) {
   return (
     <section className="mb-16" id="profile">
       <h1 className="text-3xl md:text-4xl font-extrabold neon-text mb-8">User Profile</h1>
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-1 card p-6 flex flex-col items-center text-center">
           <div className="w-24 h-24 rounded-full bg-neutral-700 mb-4 flex items-center justify-center text-4xl font-bold">
-            J
+            {user?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
-          <h2 className="text-2xl font-bold">John Doe</h2>
-          <p className="text-[var(--neutral-400)]">john.doe@example.com</p>
+          <h2 className="text-2xl font-bold">{user?.name || 'User'}</h2>
+          <p className="text-[var(--neutral-400)]">{user?.email || 'user@example.com'}</p>
           <div className="mt-4 flex items-center gap-2">
             <span className="material-icons text-base neon-text">star</span>
             <span className="font-semibold">1,250 Points</span>
           </div>
           <button className="mt-6 btn-secondary w-full">Edit Profile</button>
+          <button onClick={onLogout} className="mt-2 btn-outline w-full">Logout</button>
         </div>
 
         <div className="md:col-span-2 card p-6">

@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui
 import { Button } from './ui/button';
 
 interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: string;
   quantity: number;
@@ -13,7 +13,8 @@ interface CartSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   items: CartItem[];
-  updateItem: (id: number, quantity: number) => void;
+  updateItem: (id: string, quantity: number) => void;
+  removeItem: (id: string) => void;
   total: number;
   clearCart: () => void;
   setActiveOrder: (order: any) => void;
@@ -24,6 +25,7 @@ export function CartSheet({
   onOpenChange, 
   items, 
   updateItem, 
+  removeItem,
   total, 
   clearCart,
   setActiveOrder 

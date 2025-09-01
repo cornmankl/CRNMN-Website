@@ -17,6 +17,13 @@ import { useOrdersStore } from './store';
 import { useUIStore } from './store';
 
 // Type definitions
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
 interface CartItem {
   id: string;
   name: string;
@@ -24,13 +31,6 @@ interface CartItem {
   quantity: number;
   image?: string;
   description?: string;
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  avatar?: string;
 }
 
 interface Order {
@@ -134,7 +134,7 @@ export default function App() {
       case 'menu':
         return <MenuSection addToCart={handleAddToCart} />;
       case 'tracking':
-        return <OrderTrackingSection activeOrder={activeOrder} setActiveOrder={handleSetActiveOrder} />;
+        return <OrderTrackingSection />;
       case 'locations':
         return <LocationsSection />;
       case 'profile':

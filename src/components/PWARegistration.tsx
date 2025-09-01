@@ -11,7 +11,6 @@ interface BeforeInstallPromptEvent extends Event {
 
 export const PWARegistration: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [serviceWorkerStatus, setServiceWorkerStatus] = useState<'unsupported' | 'registering' | 'registered' | 'error'>('unsupported');
@@ -29,13 +28,11 @@ export const PWARegistration: React.FC = () => {
       e.preventDefault();
       const promptEvent = e as BeforeInstallPromptEvent;
       setDeferredPrompt(promptEvent);
-      setIsInstallable(true);
     };
 
     // Handle app installed
     const handleAppInstalled = () => {
       setIsInstalled(true);
-      setIsInstallable(false);
       setDeferredPrompt(null);
     };
 
@@ -120,7 +117,6 @@ export const PWARegistration: React.FC = () => {
         }
         
         setDeferredPrompt(null);
-        setIsInstallable(false);
       } catch (error) {
         console.error('Error during install prompt:', error);
       }
