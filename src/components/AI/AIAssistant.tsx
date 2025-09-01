@@ -1,3 +1,5 @@
+
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -11,7 +13,6 @@ import {
   Send, 
   Mic, 
   MicOff, 
-  Image, 
   Settings, 
   Trash2,
   Sparkles,
@@ -24,7 +25,6 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { useAIStore } from '../../store';
 import { AIService } from '../../utils/ai/aiService';
-import { ImageGenerator } from './ImageGenerator';
 import { AISettings } from './AISettings';
 
 interface Message {
@@ -52,7 +52,6 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [showImageGenerator, setShowImageGenerator] = useState(false);
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -130,7 +129,6 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
       const response = await aiService.sendMessage(inputMessage, {
         userPreferences,
         context: 'cornman_website',
-        includeImages: showImageGenerator
       });
 
       const assistantMessage: Message = {
@@ -229,15 +227,6 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setShowImageGenerator(!showImageGenerator)}
-              className="text-[var(--neutral-400)] hover:text-white"
-            >
-              <Image className="w-4 h-4" />
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
               onClick={() => setShowSettings(!showSettings)}
               className="text-[var(--neutral-400)] hover:text-white"
             >
@@ -268,13 +257,6 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
         {showSettings && (
           <div className="border-b border-[var(--neutral-800)] p-4">
             <AISettings />
-          </div>
-        )}
-
-        {/* Image Generator Panel */}
-        {showImageGenerator && (
-          <div className="border-b border-[var(--neutral-800)] p-4">
-            <ImageGenerator />
           </div>
         )}
 

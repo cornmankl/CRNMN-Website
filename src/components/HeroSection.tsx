@@ -1,4 +1,4 @@
-
+import React from 'react';
 
 interface HeroSectionProps {
   setActiveSection: (section: string) => void;

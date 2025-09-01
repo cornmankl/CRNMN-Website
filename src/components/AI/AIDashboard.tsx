@@ -6,16 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { 
   Bot, 
   Settings, 
-  Image, 
   Wand2, 
   TestTube,
-  BarChart3,
-  
+  Sparkles,
   Zap
 } from 'lucide-react';
 import { AIAssistant } from './AIAssistant';
 import { AISettings } from './AISettings';
-import { ImageGenerator } from './ImageGenerator';
 import { WebsiteModifier } from './WebsiteModifier';
 import { AITestPanel } from './AITestPanel';
 import { GeminiFeatures } from './GeminiFeatures';
@@ -68,7 +65,7 @@ export const AIDashboard: React.FC = () => {
 
       {/* Quick Stats */}
       {aiUser && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="bg-[var(--neutral-800)]">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
@@ -78,20 +75,6 @@ export const AIDashboard: React.FC = () => {
                 <div>
                   <div className="text-2xl font-bold text-white">{aiUser.usage.chatMessages}</div>
                   <div className="text-xs text-[var(--neutral-400)]">Chat Messages</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-[var(--neutral-800)]">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                  <Image className="w-5 h-5 text-green-500" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-white">{aiUser.usage.imagesGenerated}</div>
-                  <div className="text-xs text-[var(--neutral-400)]">Images Generated</div>
                 </div>
               </div>
             </CardContent>
@@ -131,7 +114,7 @@ export const AIDashboard: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6 bg-[var(--neutral-800)]">
+        <TabsList className="grid w-full grid-cols-5 bg-[var(--neutral-800)]">
           <TabsTrigger value="chat" className="flex items-center gap-2">
             <Bot className="w-4 h-4" />
             Chat
@@ -139,10 +122,6 @@ export const AIDashboard: React.FC = () => {
           <TabsTrigger value="gemini" className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
             Gemini
-          </TabsTrigger>
-          <TabsTrigger value="images" className="flex items-center gap-2">
-            <Image className="w-4 h-4" />
-            Images
           </TabsTrigger>
           <TabsTrigger value="modifier" className="flex items-center gap-2">
             <Wand2 className="w-4 h-4" />
@@ -192,12 +171,6 @@ export const AIDashboard: React.FC = () => {
         <TabsContent value="gemini" className="space-y-4">
           <AIAuthGuard requiredPermission="advancedFeatures">
             <GeminiFeatures />
-          </AIAuthGuard>
-        </TabsContent>
-
-        <TabsContent value="images" className="space-y-4">
-          <AIAuthGuard requiredPermission="imageGeneration">
-            <ImageGenerator />
           </AIAuthGuard>
         </TabsContent>
 

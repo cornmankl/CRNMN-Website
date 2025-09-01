@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import OpenAI from 'openai';
 
 // Define interfaces for AI service configurations and chat messages
 interface AIServiceConfig {
-  openaiApiKey?: string;
-  anthropicApiKey?: string;
-  glmApiKey?: string;
   geminiApiKey?: string;
   defaultModel: string;
   maxTokens: number;
@@ -19,7 +15,7 @@ interface ChatMessage {
 
 /**
  * @class AIService
- * @description A versatile AI service class that provides an interface to multiple AI models like OpenAI, Anthropic, and Google Gemini.
+ * @description A versatile AI service class that provides an interface to Google Gemini.
  * It is designed to be extensible and can manage different AI configurations.
  *
  * @example
@@ -27,20 +23,16 @@ interface ChatMessage {
  * const response = await aiService.generateResponse("Hello, world!");
  * console.log(response);
  */
-class AIService {
+export class AIService {
   private config: AIServiceConfig;
-  private openai: OpenAI | undefined;
-  // Placeholder for other AI clients like Anthropic, Gemini, etc.
+  // Placeholder for Gemini client
 
   /**
-   * Initializes the AIService with configuration for various AI models.
+   * Initializes the AIService with configuration for Gemini.
    * API keys are securely retrieved from environment variables.
    */
   constructor() {
     this.config = {
-      openaiApiKey: import.meta.env.VITE_OPENAI_API_KEY,
-      anthropicApiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
-      glmApiKey: import.meta.env.VITE_GLM_API_KEY,
       geminiApiKey: import.meta.env.VITE_GEMINI_API_KEY,
       defaultModel: 'gemini-pro',
       maxTokens: 2000,
@@ -54,14 +46,7 @@ class AIService {
    * Initializes AI clients if the corresponding API keys are available.
    */
   private initializeClients() {
-    if (this.config.openaiApiKey) {
-      this.openai = new OpenAI({
-        apiKey: this.config.openaiApiKey,
-        dangerouslyAllowBrowser: true // Note: This is for browser-side usage and should be handled with care.
-      });
-    }
-
-    // Initialize other clients here as they are added
+    // Initialize Gemini client here when the library is added
   }
 
   /**
@@ -79,5 +64,3 @@ class AIService {
 
   // Add other methods for image generation, etc.
 }
-
-export default AIService;

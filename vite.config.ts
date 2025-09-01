@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from "path"
@@ -6,6 +5,9 @@ import path from "path"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: {
+    'process.env': {}
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -25,9 +27,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000
   },
   server: {
-    port: 3000,
-    hmr: {
-        host: '9000-firebase-crnmn-website-1756708259141.cluster-w5vd22whf5gmav2vgkomwtc4go.cloudworkstations.dev'
-    }
+    port: 3000
   }
 })
