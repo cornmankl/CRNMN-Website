@@ -9,6 +9,8 @@ import { CartSheet } from './components/CartSheet';
 import { AuthModal } from './components/AuthModal';
 import { Footer } from './components/Footer';
 import PWARegistration from './components/PWARegistration';
+import { FloatingAIButton } from './components/AIToggle';
+import { AIDashboard } from './components/AI/AIDashboard';
 
 // Import Zustand stores
 import { useCartStore } from './store';
@@ -139,6 +141,8 @@ export default function App() {
         return <LocationsSection />;
       case 'profile':
         return <ProfileSection user={user} onLogout={handleLogout} />;
+      case 'ai':
+        return <AIDashboard />;
       default:
         return <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />;
     }
@@ -181,6 +185,9 @@ export default function App() {
         onOpenChange={setShowAuth}
         setUser={handleSetUser}
       />
+      
+      {/* Floating AI Button for Mobile */}
+      <FloatingAIButton />
     </div>
   );
 }

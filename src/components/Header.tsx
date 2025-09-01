@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AIToggle } from './AIToggle';
 
 interface HeaderProps {
   activeSection: string;
@@ -62,6 +63,14 @@ export function Header({
           >
             Locations
           </button>
+          <button
+            className={`hover:text-[var(--neutral-300)] transition-colors ${
+              activeSection === 'ai' ? 'neon-text font-semibold' : ''
+            }`}
+            onClick={() => setActiveSection('ai')}
+          >
+            AI Assistant
+          </button>
           {activeOrder && (
             <button
               className={`hover:text-[var(--neutral-300)] transition-colors flex items-center gap-1 ${
@@ -77,6 +86,9 @@ export function Header({
 
         {/* Right Actions */}
         <div className="flex items-center gap-3">
+          {/* AI Assistant Toggle */}
+          <AIToggle />
+          
           {/* Cart Button */}
           <button 
             className="p-2 rounded-full hover:bg-[var(--neutral-800)] relative transition-colors"
@@ -161,6 +173,17 @@ export function Header({
               }}
             >
               Locations
+            </button>
+            <button
+              className={`text-left py-2 hover:text-[var(--neutral-300)] transition-colors ${
+                activeSection === 'ai' ? 'neon-text font-semibold' : ''
+              }`}
+              onClick={() => {
+                setActiveSection('ai');
+                setIsMenuOpen(false);
+              }}
+            >
+              AI Assistant
             </button>
             {activeOrder && (
               <button
