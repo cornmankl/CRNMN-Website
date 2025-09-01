@@ -5621,8 +5621,8 @@
 :root {
   --font-size: 14px;
   --neon-green: #39ff14;
-  --brand-black: #000;
-  --brand-white: #fff;
+  --brand-black: #0a0a0a;
+  --brand-white: #ffffff;
   --neutral-900: #171717;
   --neutral-800: #262626;
   --neutral-700: #404040;
@@ -6123,6 +6123,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--brand-black);
+  color: var(--brand-white);
 }
 
 .App {
@@ -6135,4 +6137,22 @@ body {
   padding: 20px;
   color: white;
   border-radius: 8px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--brand-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d97706;
 }
