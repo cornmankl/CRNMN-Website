@@ -8,76 +8,152 @@ import { ProfileSection } from './components/ProfileSection';
 import { CartSheet } from './components/CartSheet';
 import { AuthModal } from './components/AuthModal';
 import { Footer } from './components/Footer';
+import PWARegistration from './components/PWARegistration';
+
+// Import Zustand stores
+import { useCartStore } from './store';
+import { useUserStore } from './store';
+import { useOrdersStore } from './store';
+import { useUIStore } from './store';
+
+// Type definitions
+interface CartItem {
+  id: string;
+  name: string;
+  price: string;
+  quantity: number;
+  image?: string;
+  description?: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+}
+
+interface Order {
+  id: string;
+  userId: string;
+  items: OrderItem[];
+  total: number;
+  status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered' | 'cancelled';
+  createdAt: Date;
+  updatedAt: Date;
+  deliveryAddress?: string;
+  trackingNumber?: string;
+  estimatedDelivery?: Date;
+}
+
+interface OrderItem {
+  id: string;
+  productId: string;
+  name: string;
+  price: string;
+  quantity: number;
+  image?: string;
+}
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [showCart, setShowCart] = useState(false);
-  const [showAuth, setShowAuth] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [user, setUser] = useState(null);
-  const [activeOrder, setActiveOrder] = useState(null);
+  // Zustand stores
+  const { items, isOpen, addItem, removeItem, updateQuantity, clearCart, toggleCart, setCartOpen, getTotal, getItemCount } = useCartStore();
+  const { user, isAuthenticated, setUser, clearUser } = useUserStore();
+  const { activeOrder, setActiveOrder } = useOrdersStore();
+  const { activeSection, setActiveSection, addNotification } = useUIStore();
 
-  const addToCart = (item) => {
-    setCartItems(prev => {
-      const existing = prev.find(cartItem => cartItem.id === item.id);
-      if (existing) {
-        return prev.map(cartItem =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        );
-      }
-      return [...prev, { ...item, quantity: 1 }];
+  // Local state (can be migrated to Zustand if needed)
+  const [showAuth, setShowAuth] = useState(false);
+
+  // Cart functions using Zustand
+  const handleAddToCart = (item: Omit<CartItem, 'quantity'>) => {
+    addItem(item);
+    addNotification({
+      type: 'success',
+      message: `${item.name} added to cart!`
     });
   };
 
-  const updateCartItem = (id, quantity) => {
-    if (quantity === 0) {
-      setCartItems(prev => prev.filter(item => item.id !== id));
-    } else {
-      setCartItems(prev =>
-        prev.map(item =>
-          item.id === id ? { ...item, quantity } : item
-        )
-      );
+  const handleUpdateCartItem = (id: string, quantity: number) => {
+    updateQuantity(id, quantity);
+  };
+
+  const handleRemoveFromCart = (id: string) => {
+    removeItem(id);
+    addNotification({
+      type: 'info',
+      message: 'Item removed from cart'
+    });
+  };
+
+  const handleClearCart = () => {
+    clearCart();
+    addNotification({
+      type: 'info',
+      message: 'Cart cleared'
+    });
+  };
+
+  // Auth functions
+  const handleSetUser = (userData: User) => {
+    setUser(userData);
+    setShowAuth(false);
+    addNotification({
+      type: 'success',
+      message: `Welcome back, ${userData?.name || 'User'}!`
+    });
+  };
+
+  const handleLogout = () => {
+    clearUser();
+    addNotification({
+      type: 'info',
+      message: 'Logged out successfully'
+    });
+  };
+
+  // Order functions
+  const handleSetActiveOrder = (order: Order | null) => {
+    setActiveOrder(order);
+    if (order) {
+      addNotification({
+        type: 'success',
+        message: 'Order status updated'
+      });
     }
   };
 
-  const clearCart = () => {
-    setCartItems([]);
-  };
-
-  const cartTotal = cartItems.reduce((total, item) => {
-    const price = parseFloat(item.price.replace('RM ', ''));
-    return total + (price * item.quantity);
-  }, 0);
-
-  const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
+  // Cart totals
+  const cartTotal = getTotal();
+  const cartCount = getItemCount();
 
   const renderSection = () => {
     switch (activeSection) {
       case 'home':
-        return <HeroSection setActiveSection={setActiveSection} addToCart={addToCart} />;
+        return <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />;
       case 'menu':
-        return <MenuSection addToCart={addToCart} />;
+        return <MenuSection addToCart={handleAddToCart} />;
       case 'tracking':
-        return <OrderTrackingSection activeOrder={activeOrder} />;
+        return <OrderTrackingSection activeOrder={activeOrder} setActiveOrder={handleSetActiveOrder} />;
       case 'locations':
         return <LocationsSection />;
       case 'profile':
-        return <ProfileSection user={user} />;
+        return <ProfileSection user={user} onLogout={handleLogout} />;
       default:
-        return <HeroSection setActiveSection={setActiveSection} addToCart={addToCart} />;
+        return <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-[var(--brand-black)] text-[var(--brand-white)]">
+      {/* PWA Registration (invisible component) */}
+      <PWARegistration />
+      
       <Header 
         activeSection={activeSection} 
         setActiveSection={setActiveSection}
         cartCount={cartCount}
-        setShowCart={setShowCart}
+        setShowCart={setCartOpen}
         user={user}
         setShowAuth={setShowAuth}
         activeOrder={activeOrder}
@@ -90,19 +166,20 @@ export default function App() {
       <Footer />
       
       <CartSheet 
-        open={showCart}
-        onOpenChange={setShowCart}
-        items={cartItems}
-        updateItem={updateCartItem}
+        open={isOpen}
+        onOpenChange={setCartOpen}
+        items={items}
+        updateItem={handleUpdateCartItem}
+        removeItem={handleRemoveFromCart}
         total={cartTotal}
-        clearCart={clearCart}
-        setActiveOrder={setActiveOrder}
+        clearCart={handleClearCart}
+        setActiveOrder={handleSetActiveOrder}
       />
 
       <AuthModal 
         open={showAuth}
         onOpenChange={setShowAuth}
-        setUser={setUser}
+        setUser={handleSetUser}
       />
     </div>
   );
