@@ -146,9 +146,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
 
       setMessages(prev => [...prev, assistantMessage]);
       
-      // Save to store
+      // Save to store (one entry per conversation pair)
       addChatMessage(inputMessage, response.content, 'user');
-      addChatMessage(inputMessage, response.content, 'bot');
 
     } catch (error) {
       console.error('AI Error:', error);
