@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-// Create a client
+// Create a client with error handling
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -22,6 +22,14 @@ const queryClient = new QueryClient({
         if (error?.status === 404 || error?.status === 401) return false;
         return failureCount < 3;
       },
+    },
+  },
+  logger: {
+    log: console.log,
+    warn: console.warn,
+    error: (error) => {
+      // Don't log React Query errors to console to avoid noise
+      console.warn('React Query error:', error);
     },
   },
 });

@@ -15,33 +15,41 @@ export class AnalyticsManager {
   trackPageView(page: string, title?: string) {
     if (!this.isEnabled) return;
 
-    const event = {
-      type: 'page_view',
-      page,
-      title: title || document.title,
-      timestamp: new Date().toISOString(),
-      url: window.location.href,
-      referrer: document.referrer
-    };
+    try {
+      const event = {
+        type: 'page_view',
+        page,
+        title: title || (typeof document !== 'undefined' ? document.title : ''),
+        timestamp: new Date().toISOString(),
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        referrer: typeof document !== 'undefined' ? document.referrer : ''
+      };
 
-    this.events.push(event);
-    this.sendToAnalytics(event);
+      this.events.push(event);
+      this.sendToAnalytics(event);
+    } catch (error) {
+      console.warn('Failed to track page view:', error);
+    }
   }
 
   // Track user interactions
   trackEvent(eventName: string, properties?: Record<string, any>) {
     if (!this.isEnabled) return;
 
-    const event = {
-      type: 'event',
-      name: eventName,
-      properties: properties || {},
-      timestamp: new Date().toISOString(),
-      url: window.location.href
-    };
+    try {
+      const event = {
+        type: 'event',
+        name: eventName,
+        properties: properties || {},
+        timestamp: new Date().toISOString(),
+        url: typeof window !== 'undefined' ? window.location.href : ''
+      };
 
-    this.events.push(event);
-    this.sendToAnalytics(event);
+      this.events.push(event);
+      this.sendToAnalytics(event);
+    } catch (error) {
+      console.warn('Failed to track event:', error);
+    }
   }
 
   // Track e-commerce events

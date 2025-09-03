@@ -20,7 +20,8 @@ import {
   Zap,
   Users,
   TrendingUp,
-  Search
+  Search,
+  Bot
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
