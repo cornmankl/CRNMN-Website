@@ -20,6 +20,7 @@ export interface AIAuthSuggestion {
   action?: string;
   confidence: number;
   priority: 'low' | 'medium' | 'high' | 'urgent';
+  timestamp: number;
 }
 
 export interface SmartValidation {

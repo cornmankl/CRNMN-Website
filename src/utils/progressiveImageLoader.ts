@@ -476,7 +476,7 @@ export const useImageOptimization = () => {
           if (img.width > 0 && img.height > 0) {
             supported.push(format);
           }
-        } catch {
+        } catch (error) {
           // Format not supported
         }
       }

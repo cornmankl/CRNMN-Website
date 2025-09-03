@@ -6,7 +6,7 @@ import { OrderTrackingSection } from './components/OrderTrackingSection';
 import { LocationsSection } from './components/LocationsSection';
 import { ProfileSection } from './components/ProfileSection';
 import { CartSheet } from './components/CartSheet';
-import { AuthModal } from './components/AuthModal';
+import { Auth2025Modal } from './components/Auth2025Modal';
 import { Footer } from './components/Footer';
 import PWARegistration from './components/PWARegistration';
 import { FloatingAIButton } from './components/AIToggle';
@@ -180,7 +180,7 @@ export default function App() {
         setActiveOrder={handleSetActiveOrder}
       />
 
-      <AuthModal 
+      <Auth2025Modal 
         open={showAuth}
         onOpenChange={setShowAuth}
         setUser={handleSetUser}

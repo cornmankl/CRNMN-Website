@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -6,6 +6,8 @@ import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 import { Badge } from './ui/badge';
 import { Checkbox } from './ui/checkbox';
+import { Progress } from './ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { 
   Eye, 
   EyeOff, 
@@ -17,7 +19,27 @@ import {
   Loader2,
   AlertCircle,
   CheckCircle,
-  Sparkles
+  Sparkles,
+  Shield,
+  Fingerprint,
+  Smartphone,
+  Mic,
+  MicOff,
+  Bot,
+  Wallet,
+  QrCode,
+  Zap,
+  Star,
+  Heart,
+  Award,
+  Magic,
+  Brain,
+  Users,
+  TrendingUp,
+  Gift,
+  Crown,
+  Gem,
+  Timer
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -31,6 +53,7 @@ interface FormData {
   email: string;
   password: string;
   name: string;
+  phone: string;
   rememberMe: boolean;
 }
 
@@ -38,6 +61,7 @@ interface FormErrors {
   email?: string;
   password?: string;
   name?: string;
+  phone?: string;
   general?: string;
 }
 
@@ -45,24 +69,78 @@ interface PasswordStrength {
   score: number;
   feedback: string;
   color: string;
+  suggestions: string[];
+}
+
+interface AIAssistance {
+  enabled: boolean;
+  suggestions: string[];
+  isLoading: boolean;
+}
+
+interface AuthCapabilities {
+  passkey: boolean;
+  voice: boolean;
+  web3: boolean;
+  biometric: boolean;
 }
 
 export function AuthModal({ open, onOpenChange, setUser }: AuthModalProps) {
+  // Core authentication state
   const [isLogin, setIsLogin] = useState(true);
+  const [authMode, setAuthMode] = useState<'email' | 'passkey' | 'voice' | 'qr' | 'wallet'>('email');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Form data and validation
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
     name: '',
+    phone: '',
     rememberMe: false
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>({
     score: 0,
     feedback: '',
-    color: ''
+    color: '',
+    suggestions: []
   });
+
+  // 2025 Authentication Features
+  const [capabilities, setCapabilities] = useState<AuthCapabilities>({
+    passkey: false,
+    voice: false,
+    web3: false,
+    biometric: false
+  });
+  
+  const [aiAssistance, setAiAssistance] = useState<AIAssistance>({
+    enabled: true, // Enabled by default in 2025
+    suggestions: [],
+    isLoading: false
+  });
+  
+  const [isListening, setIsListening] = useState(false);
+  const [socialStats, setSocialStats] = useState({
+    activeUsers: 1247,
+    todaySignups: 34,
+    avgRating: 4.9,
+    totalOrders: 12847
+  });
+  
+  // Behavioral tracking
+  const [behaviorData, setBehaviorData] = useState({
+    typingSpeed: 0,
+    riskScore: 0,
+    isAnalyzing: false
+  });
+  
+  // Refs for advanced features
+  const recognitionRef = useRef<any>(null);
+  const keystrokeTimestamps = useRef<number[]>([]);
+  const mouseMovements = useRef<{x: number, y: number, time: number}[]>([]);
 
   // Reset form when modal opens/closes or switching between login/signup
   useEffect(() => {
