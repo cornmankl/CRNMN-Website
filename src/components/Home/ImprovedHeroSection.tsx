@@ -19,7 +19,8 @@ import {
   Award,
   Zap,
   Users,
-  TrendingUp
+  TrendingUp,
+  Search
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
