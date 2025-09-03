@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { Button } from './components/ui/button';
+import { Sparkles } from 'lucide-react';
+import { cn } from './utils/cn';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { MenuSection } from './components/MenuSection';
@@ -7,6 +10,7 @@ import { LocationsSection } from './components/LocationsSection';
 import { ProfileSection } from './components/ProfileSection';
 import { CartSheet } from './components/CartSheet';
 import { Auth2025Modal } from './components/Auth2025Modal';
+import { AuthPreview2025 } from './components/AuthPreview2025';
 import { Footer } from './components/Footer';
 import PWARegistration from './components/PWARegistration';
 import { FloatingAIButton } from './components/AIToggle';
@@ -66,6 +70,12 @@ export default function App() {
 
   // Local state (can be migrated to Zustand if needed)
   const [showAuth, setShowAuth] = useState(false);
+  const [showAuthDemo, setShowAuthDemo] = useState(() => {
+    // Check URL parameters for demo mode
+    return window.location.search.includes('auth2025') || 
+           window.location.search.includes('demo') ||
+           window.location.hash.includes('auth2025');
+  });
 
   // Cart functions using Zustand
   const handleAddToCart = (item: Omit<CartItem, 'quantity'>) => {
@@ -148,6 +158,26 @@ export default function App() {
     }
   };
 
+  // Show Auth 2025 Demo if enabled
+  if (showAuthDemo) {
+    return (
+      <div className="min-h-screen bg-[var(--brand-black)] text-[var(--brand-white)]">
+        {/* Back to Main App Button */}
+        <div className="fixed top-4 left-4 z-50">
+          <Button
+            onClick={() => setShowAuthDemo(false)}
+            variant="outline"
+            className="bg-[var(--neutral-800)]/80 border-[var(--neutral-700)] text-white backdrop-blur-sm"
+          >
+            ← Back to CRNMN
+          </Button>
+        </div>
+        
+        <AuthPreview2025 />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[var(--brand-black)] text-[var(--brand-white)]">
       {/* PWA Registration (invisible component) */}
@@ -188,6 +218,23 @@ export default function App() {
       
       {/* Floating AI Button for Mobile */}
       <FloatingAIButton />
+      
+      {/* Auth 2025 Demo Access Button */}
+      <div className="fixed bottom-4 left-4 z-40">
+        <Button
+          onClick={() => setShowAuthDemo(true)}
+          className={cn(
+            "w-14 h-14 rounded-full shadow-lg",
+            "bg-gradient-to-r from-[var(--neon-green)] to-green-400",
+            "hover:from-green-400 hover:to-[var(--neon-green)]",
+            "transition-all duration-300 hover:scale-110",
+            "text-black font-bold"
+          )}
+          title="Preview Auth 2025 Features"
+        >
+          <Sparkles className="w-6 h-6" />
+        </Button>
+      </div>
     </div>
   );
 }
