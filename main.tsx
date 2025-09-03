@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { QueryProvider } from "./providers/QueryProvider";
 import { ThemeProvider } from "next-themes";
+import { HelmetProvider } from "react-helmet-async";
 import "./react-global";
 
 // Error Boundary Component
@@ -57,16 +58,18 @@ class ErrorBoundary extends React.Component<
 const AppWrapper = () => {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem={false}
-        disableTransitionOnChange
-      >
-        <QueryProvider>
-          <App />
-        </QueryProvider>
-      </ThemeProvider>
+      <HelmetProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            <App />
+          </QueryProvider>
+        </ThemeProvider>
+      </HelmetProvider>
     </ErrorBoundary>
   );
 };
