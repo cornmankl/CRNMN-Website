@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
+import { ImprovedHeroSection } from './components/Home/ImprovedHeroSection';
 import { MenuSection } from './components/MenuSection';
+import { ImprovedMenuSection } from './components/Menu/ImprovedMenuSection';
 import { OrderTrackingSection } from './components/OrderTrackingSection';
 import { LocationsSection } from './components/LocationsSection';
 import { ProfileSection } from './components/ProfileSection';
@@ -12,6 +14,7 @@ import PWARegistration from './components/PWARegistration';
 import { FloatingAIButton } from './components/AIToggle';
 import { AIDashboard } from './components/AI/AIDashboard';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
+import { FeedbackSystem } from './components/UI/FeedbackSystem';
 
 // Import Zustand stores
 import { useCartStore } from './store';
@@ -134,9 +137,18 @@ export default function App() {
   const renderSection = () => {
     switch (activeSection) {
       case 'home':
-        return <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />;
+        return <ImprovedHeroSection 
+          setActiveSection={setActiveSection} 
+          addToCart={handleAddToCart} 
+          user={user}
+          onShowAuth={() => setShowAuth(true)}
+        />;
       case 'menu':
-        return <MenuSection addToCart={handleAddToCart} isAdmin={user?.role === 'admin'} />;
+        return <ImprovedMenuSection 
+          addToCart={handleAddToCart} 
+          user={user}
+          onShowAuth={() => setShowAuth(true)}
+        />;
       case 'tracking':
         return <OrderTrackingSection activeOrder={activeOrder} user={user} />;
       case 'locations':
@@ -152,7 +164,12 @@ export default function App() {
           <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />
         );
       default:
-        return <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />;
+        return <ImprovedHeroSection 
+          setActiveSection={setActiveSection} 
+          addToCart={handleAddToCart}
+          user={user}
+          onShowAuth={() => setShowAuth(true)}
+        />;
     }
   };
 
@@ -198,6 +215,13 @@ export default function App() {
       
       {/* Floating AI Button for Mobile */}
       <FloatingAIButton />
+      
+      {/* Feedback System */}
+      <FeedbackSystem 
+        onNavigate={setActiveSection}
+        onShowCart={() => setCartOpen(true)}
+        user={user}
+      />
     </div>
   );
 }
