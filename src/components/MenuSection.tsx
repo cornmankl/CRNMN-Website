@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { FirebaseImageUpload } from './FirebaseImageUpload';
+import { ProductSearch } from './Search/ProductSearch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 interface MenuItem {
   id: string;
@@ -17,6 +19,7 @@ interface MenuSectionProps {
 }
 
 export function MenuSection({ addToCart, isAdmin = false }: MenuSectionProps) {
+  const [activeTab, setActiveTab] = useState('browse');
   const [filters, setFilters] = useState({
     vegetarian: false,
     vegan: false,
@@ -149,6 +152,18 @@ export function MenuSection({ addToCart, isAdmin = false }: MenuSectionProps) {
     console.log('Saving to database:', { itemId, updates });
   };
 
+  const handleAddToCart = (product: any) => {
+    // Convert product format to cart item format
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: `RM ${product.price.toFixed(2)}`,
+      category: product.category
+    };
+    addToCart(cartItem);
+  };
+
   return (
     <section className="mb-16" id="menu">
       <div className="flex items-center justify-between mb-8">
@@ -162,6 +177,25 @@ export function MenuSection({ addToCart, isAdmin = false }: MenuSectionProps) {
           </button>
         )}
       </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2 bg-[var(--neutral-800)] border border-[var(--neutral-700)]">
+          <TabsTrigger value="browse" className="data-[state=active]:bg-[var(--neon-green)] data-[state=active]:text-black">
+            Browse Menu
+          </TabsTrigger>
+          <TabsTrigger value="search" className="data-[state=active]:bg-[var(--neon-green)] data-[state=active]:text-black">
+            Search & Filter
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="search" className="space-y-6">
+          <ProductSearch 
+            onAddToCart={handleAddToCart}
+            onToggleFavorite={(productId) => console.log('Toggle favorite:', productId)}
+          />
+        </TabsContent>
+
+        <TabsContent value="browse" className="space-y-6">
       
       {/* Category Tabs */}
       <div className="mb-8 overflow-x-auto">
@@ -384,6 +418,8 @@ export function MenuSection({ addToCart, isAdmin = false }: MenuSectionProps) {
           )}
         </div>
       </div>
+        </TabsContent>
+      </Tabs>
     </section>
   );
 }

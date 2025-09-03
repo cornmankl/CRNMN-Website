@@ -1,4 +1,5 @@
 import React from 'react';
+import { FeatureShowcase } from './FeatureShowcase';
 
 interface HeroSectionProps {
   setActiveSection: (section: string) => void;
@@ -221,6 +222,11 @@ export function HeroSection({ setActiveSection, addToCart }: HeroSectionProps) {
           </div>
         </div>
       </section>
+
+      {/* Feature Showcase */}
+      <div className="mt-16">
+        <FeatureShowcase onNavigate={setActiveSection} />
+      </div>
     </div>
   );
 }

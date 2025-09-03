@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import PWARegistration from './components/PWARegistration';
 import { FloatingAIButton } from './components/AIToggle';
 import { AIDashboard } from './components/AI/AIDashboard';
+import { AdminDashboard } from './components/Admin/AdminDashboard';
 
 // Import Zustand stores
 import { useCartStore } from './store';
@@ -66,6 +67,7 @@ export default function App() {
 
   // Local state (can be migrated to Zustand if needed)
   const [showAuth, setShowAuth] = useState(false);
+  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
 
   // Cart functions using Zustand
   const handleAddToCart = (item: Omit<CartItem, 'quantity'>) => {
@@ -136,13 +138,19 @@ export default function App() {
       case 'menu':
         return <MenuSection addToCart={handleAddToCart} isAdmin={user?.role === 'admin'} />;
       case 'tracking':
-        return <OrderTrackingSection />;
+        return <OrderTrackingSection activeOrder={activeOrder} user={user} />;
       case 'locations':
         return <LocationsSection />;
       case 'profile':
         return <ProfileSection user={user} onLogout={handleLogout} />;
       case 'ai':
         return <AIDashboard />;
+      case 'admin':
+        return user?.role === 'admin' ? (
+          <AdminDashboard user={user} onClose={() => setActiveSection('home')} />
+        ) : (
+          <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />
+        );
       default:
         return <HeroSection setActiveSection={setActiveSection} addToCart={handleAddToCart} />;
     }
@@ -161,6 +169,8 @@ export default function App() {
         user={user}
         setShowAuth={setShowAuth}
         activeOrder={activeOrder}
+        onLogout={handleLogout}
+        onAddToCart={handleAddToCart}
       />
       
       <main>

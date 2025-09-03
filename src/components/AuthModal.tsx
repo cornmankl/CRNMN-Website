@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
+import { EmailVerification } from './Auth/EmailVerification';
+import { PasswordReset } from './Auth/PasswordReset';
 
 interface AuthModalProps {
   open: boolean;
@@ -10,6 +12,8 @@ interface AuthModalProps {
 
 export function AuthModal({ open, onOpenChange, setUser }: AuthModalProps) {
   const [isLogin, setIsLogin] = useState(true);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [showPasswordReset, setShowPasswordReset] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,17 +23,49 @@ export function AuthModal({ open, onOpenChange, setUser }: AuthModalProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Mock authentication
+    if (!isLogin) {
+      // For signup, show email verification
+      setShowEmailVerification(true);
+      return;
+    }
+    
+    // Mock authentication for login
     const mockUser = {
       id: 1,
       name: isLogin ? 'John Doe' : formData.name,
       email: formData.email,
-      loyaltyPoints: 1250
+      loyaltyPoints: 1250,
+      role: formData.email === 'admin@crnmn.com' ? 'admin' : 'user'
     };
     
     setUser(mockUser);
     onOpenChange(false);
     setFormData({ email: '', password: '', name: '' });
+  };
+
+  const handleVerificationComplete = () => {
+    // Complete signup after email verification
+    const mockUser = {
+      id: 1,
+      name: formData.name,
+      email: formData.email,
+      loyaltyPoints: 100, // Welcome bonus
+      isEmailVerified: true
+    };
+    
+    setUser(mockUser);
+    setShowEmailVerification(false);
+    onOpenChange(false);
+    setFormData({ email: '', password: '', name: '' });
+  };
+
+  const handleForgotPassword = () => {
+    setShowPasswordReset(true);
+  };
+
+  const handlePasswordResetComplete = () => {
+    setShowPasswordReset(false);
+    // Optionally show success message
   };
 
   return (
@@ -96,7 +132,35 @@ export function AuthModal({ open, onOpenChange, setUser }: AuthModalProps) {
             {isLogin ? 'Sign Up' : 'Sign In'}
           </button>
         </div>
+        
+        {/* Forgot Password Link */}
+        {isLogin && (
+          <div className="text-center">
+            <Button
+              variant="ghost"
+              onClick={handleForgotPassword}
+              className="text-[var(--neon-green)] hover:text-[var(--neon-green)]/80 p-0 h-auto"
+            >
+              Forgot your password?
+            </Button>
+          </div>
+        )}
       </DialogContent>
+      
+      {/* Email Verification Modal */}
+      <EmailVerification
+        isOpen={showEmailVerification}
+        onClose={() => setShowEmailVerification(false)}
+        email={formData.email}
+        onVerificationComplete={handleVerificationComplete}
+      />
+      
+      {/* Password Reset Modal */}
+      <PasswordReset
+        isOpen={showPasswordReset}
+        onClose={() => setShowPasswordReset(false)}
+        onBackToLogin={handlePasswordResetComplete}
+      />
     </Dialog>
   );
 }

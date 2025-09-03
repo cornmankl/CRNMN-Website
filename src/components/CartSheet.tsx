@@ -1,6 +1,7 @@
-import React from 'react';
+import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
 import { Button } from './ui/button';
+import { EnhancedCheckoutModal } from './Checkout/EnhancedCheckoutModal';
 
 interface CartItem {
   id: string;
@@ -30,12 +31,17 @@ export function CartSheet({
   clearCart,
   setActiveOrder 
 }: CartSheetProps) {
+  const [showCheckout, setShowCheckout] = useState(false);
+
   const handleCheckout = () => {
     if (items.length === 0) return;
-    
+    setShowCheckout(true);
+  };
+
+  const handleCheckoutSuccess = (orderId: string) => {
     // Create a new order
     const newOrder = {
-      id: `#${Math.floor(Math.random() * 10000)}`,
+      id: orderId,
       items: [...items],
       total: total,
       status: 'preparing',
@@ -46,10 +52,14 @@ export function CartSheet({
     setActiveOrder(newOrder);
     clearCart();
     onOpenChange(false);
-    
-    // Show success message (you could add a toast here)
-    alert('Order placed successfully! Check tracking for updates.');
+    setShowCheckout(false);
   };
+
+  // Convert price strings to numbers for checkout
+  const checkoutItems = items.map(item => ({
+    ...item,
+    price: typeof item.price === 'string' ? parseFloat(item.price.replace('RM ', '')) : item.price
+  }));
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -151,6 +161,13 @@ export function CartSheet({
           )}
         </div>
       </SheetContent>
+      
+      <EnhancedCheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        items={checkoutItems}
+        onSuccess={handleCheckoutSuccess}
+      />
     </Sheet>
   );
 }

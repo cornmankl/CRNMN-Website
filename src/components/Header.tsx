@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AIToggle } from './AIToggle';
+import { MobileMenu } from './Navigation/MobileMenu';
+import { NotificationSystem } from './Notifications/NotificationSystem';
+import { WishlistManager } from './Cart/WishlistManager';
 
 interface HeaderProps {
   activeSection: string;
@@ -9,6 +12,8 @@ interface HeaderProps {
   user: any;
   setShowAuth: (show: boolean) => void;
   activeOrder: any;
+  onLogout?: () => void;
+  onAddToCart?: (item: any) => void;
 }
 
 export function Header({ 
@@ -18,24 +23,37 @@ export function Header({
   setShowCart, 
   user, 
   setShowAuth,
-  activeOrder 
+  activeOrder,
+  onLogout = () => {},
+  onAddToCart = () => {}
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur bg-black/90 border-b border-[var(--neutral-800)]">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <button 
-          className="flex items-center gap-3" 
-          onClick={() => setActiveSection('home')}
-        >
-          <div className="h-10 w-10 rounded-full neon-bg"></div>
-          <div>
-            <p className="text-sm tracking-[0.3em] neon-text font-semibold">THEFMSMKT</p>
-            <p className="text-xs text-[var(--neutral-400)]">CMNTYPLX · CORNMAN</p>
-          </div>
-        </button>
+        {/* Mobile Menu & Logo */}
+        <div className="flex items-center gap-3">
+          <MobileMenu
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+            user={user}
+            onAuthClick={() => setShowAuth(true)}
+            onLogout={onLogout}
+            cartCount={cartCount}
+            activeOrder={activeOrder}
+          />
+          <button 
+            className="flex items-center gap-3" 
+            onClick={() => setActiveSection('home')}
+          >
+            <div className="h-10 w-10 rounded-full neon-bg"></div>
+            <div>
+              <p className="text-sm tracking-[0.3em] neon-text font-semibold">CRNMN</p>
+              <p className="text-xs text-[var(--neutral-400)]">Premium Corn</p>
+            </div>
+          </button>
+        </div>
 
         {/* Main Navigation */}
         <nav className="hidden md:flex items-center gap-8 text-sm">
@@ -88,6 +106,16 @@ export function Header({
         <div className="flex items-center gap-3">
           {/* AI Assistant Toggle */}
           <AIToggle />
+          
+          {/* Notifications */}
+          {user && (
+            <NotificationSystem user={user} activeOrder={activeOrder} />
+          )}
+          
+          {/* Wishlist */}
+          {user && (
+            <WishlistManager user={user} onAddToCart={onAddToCart} />
+          )}
           
           {/* Cart Button */}
           <button 
