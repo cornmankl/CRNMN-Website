@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { ImprovedHeroSection } from './components/Home/ImprovedHeroSection';
-import { MenuSection } from './components/MenuSection';
 import { ImprovedMenuSection } from './components/Menu/ImprovedMenuSection';
 import { OrderTrackingSection } from './components/OrderTrackingSection';
 import { LocationsSection } from './components/LocationsSection';
@@ -15,6 +14,21 @@ import { FloatingAIButton } from './components/AIToggle';
 import { AIDashboard } from './components/AI/AIDashboard';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
 import { FeedbackSystem } from './components/ui/FeedbackSystem';
+
+// New enhanced components
+import { SEOHead } from './components/SEO/SEOHead';
+import { SocialMediaIntegration } from './components/Marketing/SocialMediaIntegration';
+import { EnhancedAIAssistant } from './components/AI/EnhancedAIAssistant';
+import { LiveOrderTracking } from './components/RealTime/LiveOrderTracking';
+import { PaymentOptions } from './components/Payment/PaymentOptions';
+
+
+// Analytics and utilities
+import { analytics } from './utils/analytics';
+import { performanceMonitor } from './utils/analytics';
+
+import { realTimeManager } from './utils/realTime';
+import { lazyLoadImages } from './utils/imageOptimization';
 
 // Import Zustand stores
 import { useCartStore } from './store';
@@ -70,7 +84,29 @@ export default function App() {
 
   // Local state (can be migrated to Zustand if needed)
   const [showAuth, setShowAuth] = useState(false);
-  const [showAdminDashboard, setShowAdminDashboard] = useState(false);
+  const [showEnhancedAI, setShowEnhancedAI] = useState(false);
+  const [showLiveTracking, setShowLiveTracking] = useState(false);
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+
+  // Initialize analytics and real-time features
+  useEffect(() => {
+    // Initialize analytics
+    analytics.trackPageView('home', 'CRNMN - Premium Corn Restaurant');
+    
+    // Initialize real-time manager
+    realTimeManager.connect();
+    
+    // Initialize lazy loading
+    lazyLoadImages();
+    
+    // Track performance
+    performanceMonitor.measurePageLoad();
+    
+    // Cleanup on unmount
+    return () => {
+      realTimeManager.disconnect();
+    };
+  }, []);
 
   // Cart functions using Zustand
   const handleAddToCart = (item: Omit<CartItem, 'quantity'>) => {
@@ -79,6 +115,9 @@ export default function App() {
       type: 'success',
       message: `${item.name} added to cart!`
     });
+    
+    // Track analytics
+    analytics.trackAddToCart(item);
   };
 
   const handleUpdateCartItem = (id: string, quantity: number) => {
@@ -134,11 +173,17 @@ export default function App() {
   const cartTotal = getTotal();
   const cartCount = getItemCount();
 
+  // Enhanced navigation with analytics
+  const handleNavigate = (section: string) => {
+    setActiveSection(section);
+    analytics.trackPageView(section, `CRNMN - ${section.charAt(0).toUpperCase() + section.slice(1)}`);
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'home':
         return <ImprovedHeroSection 
-          setActiveSection={setActiveSection} 
+          setActiveSection={handleNavigate} 
           addToCart={handleAddToCart} 
           user={user}
           onShowAuth={() => setShowAuth(true)}
@@ -155,6 +200,8 @@ export default function App() {
         return <LocationsSection />;
       case 'profile':
         return <ProfileSection user={user} onLogout={handleLogout} />;
+      case 'social':
+        return <SocialMediaIntegration onShare={(platform) => analytics.trackEvent('social_share', { platform })} />;
       case 'ai':
         return <AIDashboard />;
       case 'admin':
@@ -175,12 +222,19 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[var(--brand-black)] text-[var(--brand-white)]">
+      {/* SEO Head */}
+      <SEOHead 
+        title="CRNMN - Premium Corn Restaurant | Fresh Corn Dishes & More"
+        description="Discover the finest corn dishes at CRNMN. From sweet corn delights to spicy fritters, we serve fresh, delicious corn-based meals. Order online for delivery or dine-in."
+        keywords="corn restaurant, corn dishes, sweet corn, corn fritters, corn soup, vegetarian food, Malaysian corn, fresh corn, corn delivery, corn menu"
+      />
+      
       {/* PWA Registration (invisible component) */}
       <PWARegistration />
       
       <Header 
         activeSection={activeSection} 
-        setActiveSection={setActiveSection}
+        setActiveSection={handleNavigate}
         cartCount={cartCount}
         setShowCart={setCartOpen}
         user={user}
@@ -212,6 +266,41 @@ export default function App() {
         onOpenChange={setShowAuth}
         setUser={handleSetUser}
       />
+      
+      {/* Enhanced AI Assistant */}
+      {showEnhancedAI && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <EnhancedAIAssistant 
+            onClose={() => setShowEnhancedAI(false)}
+            onAddToCart={handleAddToCart}
+          />
+        </div>
+      )}
+      
+      {/* Live Order Tracking */}
+      {showLiveTracking && activeOrder && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <LiveOrderTracking 
+            orderId={activeOrder.id}
+            onClose={() => setShowLiveTracking(false)}
+          />
+        </div>
+      )}
+      
+      {/* Payment Options */}
+      {showPaymentOptions && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-[var(--neutral-900)] rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <PaymentOptions 
+              onSelectPayment={(method) => {
+                analytics.trackEvent('payment_method_selected', { method: method.name });
+                setShowPaymentOptions(false);
+              }}
+              totalAmount={cartTotal}
+            />
+          </div>
+        </div>
+      )}
       
       {/* Floating AI Button for Mobile */}
       <FloatingAIButton />
