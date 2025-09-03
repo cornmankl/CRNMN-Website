@@ -94,7 +94,10 @@ export const useCartStore = create<CartState>()(
         getTotal: () => {
           const { items } = get();
           return items.reduce((total, item) => {
-            const price = parseFloat(item.price.replace('RM ', ''));
+            // Handle both string and number prices
+            const price = typeof item.price === 'string' 
+              ? parseFloat(item.price.replace(/[^0-9.]/g, '')) 
+              : item.price;
             return total + (price * item.quantity);
           }, 0);
         },

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+// import { label } from '../ui/label'; // Removed to fix import error
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Textarea } from '../ui/textarea';
@@ -677,7 +677,7 @@ export function AdminDashboard({ user, onClose }: AdminDashboardProps) {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-[var(--neutral-300)]">Product Name</Label>
+                    <label className="text-[var(--neutral-300)]">Product Name</label>
                     <Input
                       value={editingProduct.name || ''}
                       onChange={(e) => setEditingProduct({...editingProduct, name: e.target.value})}
@@ -685,7 +685,7 @@ export function AdminDashboard({ user, onClose }: AdminDashboardProps) {
                     />
                   </div>
                   <div>
-                    <Label className="text-[var(--neutral-300)]">Category</Label>
+                    <label className="text-[var(--neutral-300)]">Category</label>
                     <select
                       value={editingProduct.category || ''}
                       onChange={(e) => setEditingProduct({...editingProduct, category: e.target.value})}
@@ -701,7 +701,7 @@ export function AdminDashboard({ user, onClose }: AdminDashboardProps) {
                 </div>
 
                 <div>
-                  <Label className="text-[var(--neutral-300)]">Description</Label>
+                  <label className="text-[var(--neutral-300)]">Description</label>
                   <Textarea
                     value={editingProduct.description || ''}
                     onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})}
@@ -712,7 +712,7 @@ export function AdminDashboard({ user, onClose }: AdminDashboardProps) {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label className="text-[var(--neutral-300)]">Price (RM)</Label>
+                    <label className="text-[var(--neutral-300)]">Price (RM)</label>
                     <Input
                       type="number"
                       step="0.01"
@@ -722,7 +722,7 @@ export function AdminDashboard({ user, onClose }: AdminDashboardProps) {
                     />
                   </div>
                   <div>
-                    <Label className="text-[var(--neutral-300)]">Stock</Label>
+                    <label className="text-[var(--neutral-300)]">Stock</label>
                     <Input
                       type="number"
                       value={editingProduct.stock || ''}
@@ -731,7 +731,7 @@ export function AdminDashboard({ user, onClose }: AdminDashboardProps) {
                     />
                   </div>
                   <div>
-                    <Label className="text-[var(--neutral-300)]">Low Stock Alert</Label>
+                    <label className="text-[var(--neutral-300)]">Low Stock Alert</label>
                     <Input
                       type="number"
                       value={editingProduct.lowStockThreshold || ''}

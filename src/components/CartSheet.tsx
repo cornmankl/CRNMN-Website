@@ -58,7 +58,7 @@ export function CartSheet({
   // Convert price strings to numbers for checkout
   const checkoutItems = items.map(item => ({
     ...item,
-    price: typeof item.price === 'string' ? parseFloat(item.price.replace('RM ', '')) : item.price
+    price: typeof item.price === 'string' ? parseFloat(item.price.replace(/[^0-9.]/g, '')) : item.price
   }));
 
   return (

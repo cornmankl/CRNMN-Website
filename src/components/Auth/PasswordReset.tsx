@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+// import { label } from '../ui/label'; // Removed to fix import error
 import { 
   Mail, 
   Lock, 
@@ -167,7 +167,7 @@ export function PasswordReset({ isOpen, onClose, onBackToLogin }: PasswordResetP
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[var(--neutral-300)]">Email Address</Label>
+              <label className="text-[var(--neutral-300)]">Email Address</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--neutral-400)]" />
                 <Input
@@ -236,7 +236,7 @@ export function PasswordReset({ isOpen, onClose, onBackToLogin }: PasswordResetP
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[var(--neutral-300)]">Reset Code</Label>
+              <label className="text-[var(--neutral-300)]">Reset Code</label>
               <div className="flex justify-center">
                 <Input
                   type="text"
@@ -337,7 +337,7 @@ export function PasswordReset({ isOpen, onClose, onBackToLogin }: PasswordResetP
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-[var(--neutral-300)]">New Password</Label>
+                <label className="text-[var(--neutral-300)]">New Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--neutral-400)]" />
                   <Input
@@ -369,7 +369,7 @@ export function PasswordReset({ isOpen, onClose, onBackToLogin }: PasswordResetP
               </div>
 
               <div className="space-y-2">
-                <Label className="text-[var(--neutral-300)]">Confirm Password</Label>
+                <label className="text-[var(--neutral-300)]">Confirm Password</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--neutral-400)]" />
                   <Input

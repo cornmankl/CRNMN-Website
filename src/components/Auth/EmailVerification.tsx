@@ -158,7 +158,7 @@ export function EmailVerification({
         <div className="space-y-6">
           {/* Verification Code Input */}
           <div className="space-y-2">
-            <Label className="text-[var(--neutral-300)]">Verification Code</Label>
+            <label className="text-[var(--neutral-300)]">Verification Code</label>
             <div className="flex justify-center">
               <Input
                 type="text"

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+// import { Label } from '../ui/label'; // Removed to fix import error
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
@@ -563,7 +563,7 @@ export function UserDashboard({ user, onLogout, onUpdateProfile }: UserDashboard
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[var(--neutral-300)]">Full Name</Label>
+                  <label htmlFor="name" className="text-[var(--neutral-300)] font-medium text-sm">Full Name</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--neutral-400)]" />
                     <Input
@@ -577,7 +577,7 @@ export function UserDashboard({ user, onLogout, onUpdateProfile }: UserDashboard
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[var(--neutral-300)]">Email Address</Label>
+                  <label htmlFor="email" className="text-[var(--neutral-300)] font-medium text-sm">Email Address</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--neutral-400)]" />
                     <Input
@@ -592,7 +592,7 @@ export function UserDashboard({ user, onLogout, onUpdateProfile }: UserDashboard
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-[var(--neutral-300)]">Phone Number</Label>
+                  <label htmlFor="phone" className="text-[var(--neutral-300)] font-medium text-sm">Phone Number</label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--neutral-400)]" />
                     <Input
@@ -606,7 +606,7 @@ export function UserDashboard({ user, onLogout, onUpdateProfile }: UserDashboard
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="dateOfBirth" className="text-[var(--neutral-300)]">Date of Birth</Label>
+                  <label htmlFor="dateOfBirth" className="text-[var(--neutral-300)] font-medium text-sm">Date of Birth</label>
                   <div className="relative">
                     <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--neutral-400)]" />
                     <Input
@@ -622,7 +622,7 @@ export function UserDashboard({ user, onLogout, onUpdateProfile }: UserDashboard
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="address" className="text-[var(--neutral-300)]">Delivery Address</Label>
+                <label htmlFor="address" className="text-[var(--neutral-300)] font-medium text-sm">Delivery Address</label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-3 w-4 h-4 text-[var(--neutral-400)]" />
                   <textarea

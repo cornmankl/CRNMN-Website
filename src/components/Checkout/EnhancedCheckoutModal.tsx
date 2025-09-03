@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+// import { label } from '../ui/label'; // Removed to fix import error
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Separator } from '../ui/separator';
@@ -366,7 +366,7 @@ export function EnhancedCheckoutModal({
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label className="text-[var(--neutral-300)]">Delivery Address *</Label>
+                      <label className="text-[var(--neutral-300)] font-medium text-sm">Delivery Address *</label>
                       <textarea
                         rows={3}
                         value={formData.deliveryAddress}
@@ -386,7 +386,7 @@ export function EnhancedCheckoutModal({
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-[var(--neutral-300)]">Delivery Instructions (Optional)</Label>
+                      <label className="text-[var(--neutral-300)] font-medium text-sm">Delivery Instructions (Optional)</label>
                       <Input
                         value={formData.deliveryInstructions}
                         onChange={(e) => handleInputChange('deliveryInstructions', e.target.value)}
@@ -396,7 +396,7 @@ export function EnhancedCheckoutModal({
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-[var(--neutral-300)]">Contact Number *</Label>
+                      <label className="text-[var(--neutral-300)] font-medium text-sm">Contact Number *</label>
                       <Input
                         value={formData.contactNumber}
                         onChange={(e) => handleInputChange('contactNumber', e.target.value)}
@@ -454,7 +454,7 @@ export function EnhancedCheckoutModal({
                     {formData.deliveryOption === 'scheduled' && (
                       <div className="mt-4 grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label className="text-[var(--neutral-300)]">Date *</Label>
+                          <label className="text-[var(--neutral-300)] font-medium text-sm">Date *</label>
                           <Input
                             type="date"
                             value={formData.scheduledDate}
@@ -467,7 +467,7 @@ export function EnhancedCheckoutModal({
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-[var(--neutral-300)]">Time *</Label>
+                          <label className="text-[var(--neutral-300)] font-medium text-sm">Time *</label>
                           <Input
                             type="time"
                             value={formData.scheduledTime}
@@ -529,7 +529,7 @@ export function EnhancedCheckoutModal({
                     {formData.paymentMethod === 'card' && (
                       <div className="mt-6 space-y-4">
                         <div className="space-y-2">
-                          <Label className="text-[var(--neutral-300)]">Card Number *</Label>
+                          <label className="text-[var(--neutral-300)] font-medium text-sm">Card Number *</label>
                           <div className="relative">
                             <Input
                               value={formData.cardNumber}
@@ -547,7 +547,7 @@ export function EnhancedCheckoutModal({
 
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <Label className="text-[var(--neutral-300)]">Expiry Date *</Label>
+                            <label className="text-[var(--neutral-300)] font-medium text-sm">Expiry Date *</label>
                             <Input
                               value={formData.expiryDate}
                               onChange={(e) => handleInputChange('expiryDate', e.target.value)}
@@ -560,7 +560,7 @@ export function EnhancedCheckoutModal({
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-[var(--neutral-300)]">CVV *</Label>
+                            <label className="text-[var(--neutral-300)] font-medium text-sm">CVV *</label>
                             <Input
                               value={formData.cvv}
                               onChange={(e) => handleInputChange('cvv', e.target.value)}
@@ -575,7 +575,7 @@ export function EnhancedCheckoutModal({
                         </div>
 
                         <div className="space-y-2">
-                          <Label className="text-[var(--neutral-300)]">Cardholder Name *</Label>
+                          <label className="text-[var(--neutral-300)] font-medium text-sm">Cardholder Name *</label>
                           <Input
                             value={formData.cardName}
                             onChange={(e) => handleInputChange('cardName', e.target.value)}
@@ -594,9 +594,9 @@ export function EnhancedCheckoutModal({
                             onCheckedChange={(checked) => handleInputChange('savePaymentMethod', !!checked)}
                             className="border-[var(--neutral-600)] data-[state=checked]:bg-[var(--neon-green)] data-[state=checked]:border-[var(--neon-green)]"
                           />
-                          <Label htmlFor="savePayment" className="text-sm text-[var(--neutral-400)]">
+                          <label htmlFor="savePayment" className="text-sm text-[var(--neutral-400)]">
                             Save payment method for future orders
-                          </Label>
+                          </label>
                         </div>
                       </div>
                     )}
@@ -673,9 +673,9 @@ export function EnhancedCheckoutModal({
                             onCheckedChange={(checked) => handleInputChange('applyLoyaltyPoints', !!checked)}
                             className="border-[var(--neutral-600)] data-[state=checked]:bg-[var(--neon-green)] data-[state=checked]:border-[var(--neon-green)]"
                           />
-                          <Label htmlFor="loyaltyPoints" className="text-white">
+                          <label htmlFor="loyaltyPoints" className="text-white">
                             Use {user.loyaltyPoints} loyalty points
-                          </Label>
+                          </label>
                         </div>
                         <span className="text-[var(--neon-green)] font-semibold">
                           -RM {loyaltyDiscount.toFixed(2)}
