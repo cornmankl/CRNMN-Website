@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
-import { OnboardingFlow, useOnboarding } from '../Welcome/OnboardingFlow';
+import { OnboardingFlow, useOnboarding } from '../ui/OnboardingFlow';
 import { 
   ArrowRight, 
   Star, 

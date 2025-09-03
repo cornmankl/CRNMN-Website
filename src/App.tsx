@@ -14,7 +14,7 @@ import PWARegistration from './components/PWARegistration';
 import { FloatingAIButton } from './components/AIToggle';
 import { AIDashboard } from './components/AI/AIDashboard';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
-import { FeedbackSystem } from './components/UI/FeedbackSystem';
+import { FeedbackSystem } from './components/ui/FeedbackSystem';
 
 // Import Zustand stores
 import { useCartStore } from './store';
