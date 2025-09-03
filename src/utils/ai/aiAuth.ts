@@ -1,5 +1,4 @@
 import { supabase } from '../supabase/client';
-import { useUserStore } from '../../store';
 
 export interface AIUser {
   id: string;
@@ -45,16 +44,22 @@ export class AIAuthService {
         return null;
       }
 
-      // Get user profile from database
-      const { data: profile, error: profileError } = await supabase
-        .from('ai_user_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
+      // Get user profile from database (with error handling for missing tables)
+      let profile = null;
+      try {
+        const { data: profileData, error: profileError } = await supabase
+          .from('ai_user_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
 
-      if (profileError && profileError.code !== 'PGRST116') {
-        console.error('Error fetching user profile:', profileError);
-        return null;
+        if (profileError && profileError.code !== 'PGRST116') {
+          console.warn('Error fetching user profile (table may not exist):', profileError);
+        } else {
+          profile = profileData;
+        }
+      } catch (tableError) {
+        console.warn('AI user profiles table may not exist:', tableError);
       }
 
       // Create or update user profile
@@ -82,8 +87,12 @@ export class AIAuthService {
         }
       };
 
-      // Save/update profile in database
-      await this.saveUserProfile(aiUser);
+      // Save/update profile in database (with error handling)
+      try {
+        await this.saveUserProfile(aiUser);
+      } catch (saveError) {
+        console.warn('Failed to save user profile:', saveError);
+      }
       
       this.currentUser = aiUser;
       return aiUser;
@@ -113,10 +122,12 @@ export class AIAuthService {
         });
 
       if (error) {
-        console.error('Error saving user profile:', error);
+        console.warn('Error saving user profile (table may not exist):', error);
+        // Don't throw error, just log it
       }
     } catch (error) {
-      console.error('Error saving user profile:', error);
+      console.warn('Error saving user profile (table may not exist):', error);
+      // Don't throw error, just log it
     }
   }
 
@@ -318,7 +329,7 @@ export class AIAuthService {
     }
   }
 
-  async logUsage(type: 'chat' | 'image' | 'modification', metadata?: any): Promise<void> {
+  async logUsage(type: 'chat' | 'image' | 'modification', metadata?: Record<string, any>): Promise<void> {
     if (!this.currentUser) return;
 
     try {
@@ -350,26 +361,47 @@ export const useAIAuth = () => {
 
   React.useEffect(() => {
     const initAuth = async () => {
-      setLoading(true);
-      const authenticatedUser = await aiAuth.authenticateUser();
-      setUser(authenticatedUser);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const authenticatedUser = await aiAuth.authenticateUser();
+        setUser(authenticatedUser);
+      } catch (error) {
+        console.warn('Failed to initialize AI auth:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
     };
 
     initAuth();
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        const authenticatedUser = await aiAuth.authenticateUser();
-        setUser(authenticatedUser);
-      } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-      }
-    });
+    // Listen for auth changes safely
+    try {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event) => {
+        try {
+          if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+            const authenticatedUser = await aiAuth.authenticateUser();
+            setUser(authenticatedUser);
+          } else if (event === 'SIGNED_OUT') {
+            setUser(null);
+          }
+        } catch (error) {
+          console.warn('Failed to handle auth state change:', error);
+        }
+      });
 
-    return () => subscription.unsubscribe();
-  }, []);
+      return () => {
+        try {
+          subscription.unsubscribe();
+        } catch (error) {
+          console.warn('Failed to unsubscribe from auth changes:', error);
+        }
+      };
+    } catch (error) {
+      console.warn('Failed to set up auth listener:', error);
+      return () => {};
+    }
+  }, [aiAuth]);
 
   return {
     user,

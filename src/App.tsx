@@ -90,21 +90,29 @@ export default function App() {
 
   // Initialize analytics and real-time features
   useEffect(() => {
-    // Initialize analytics
-    analytics.trackPageView('home', 'CRNMN - Premium Corn Restaurant');
-    
-    // Initialize real-time manager
-    realTimeManager.connect();
-    
-    // Initialize lazy loading
-    lazyLoadImages();
-    
-    // Track performance
-    performanceMonitor.measurePageLoad();
+    try {
+      // Initialize analytics
+      analytics.trackPageView('home', 'CRNMN - Premium Corn Restaurant');
+      
+      // Initialize real-time manager
+      realTimeManager.connect();
+      
+      // Initialize lazy loading
+      lazyLoadImages();
+      
+      // Track performance
+      performanceMonitor.measurePageLoad();
+    } catch (error) {
+      console.warn('Failed to initialize app features:', error);
+    }
     
     // Cleanup on unmount
     return () => {
-      realTimeManager.disconnect();
+      try {
+        realTimeManager.disconnect();
+      } catch (error) {
+        console.warn('Failed to disconnect real-time manager:', error);
+      }
     };
   }, []);
 
@@ -116,8 +124,12 @@ export default function App() {
       message: `${item.name} added to cart!`
     });
     
-    // Track analytics
-    analytics.trackAddToCart(item);
+    // Track analytics safely
+    try {
+      analytics.trackAddToCart(item);
+    } catch (error) {
+      console.warn('Failed to track add to cart:', error);
+    }
   };
 
   const handleUpdateCartItem = (id: string, quantity: number) => {
@@ -176,7 +188,11 @@ export default function App() {
   // Enhanced navigation with analytics
   const handleNavigate = (section: string) => {
     setActiveSection(section);
-    analytics.trackPageView(section, `CRNMN - ${section.charAt(0).toUpperCase() + section.slice(1)}`);
+    try {
+      analytics.trackPageView(section, `CRNMN - ${section.charAt(0).toUpperCase() + section.slice(1)}`);
+    } catch (error) {
+      console.warn('Failed to track page view:', error);
+    }
   };
 
   const renderSection = () => {
@@ -200,8 +216,14 @@ export default function App() {
         return <LocationsSection />;
       case 'profile':
         return <ProfileSection user={user} onLogout={handleLogout} />;
-      case 'social':
-        return <SocialMediaIntegration onShare={(platform) => analytics.trackEvent('social_share', { platform })} />;
+              case 'social':
+          return <SocialMediaIntegration onShare={(platform) => {
+            try {
+              analytics.trackEvent('social_share', { platform });
+            } catch (error) {
+              console.warn('Failed to track social share:', error);
+            }
+          }} />;
       case 'ai':
         return <AIDashboard />;
       case 'admin':
@@ -291,13 +313,17 @@ export default function App() {
       {showPaymentOptions && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-[var(--neutral-900)] rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <PaymentOptions 
-              onSelectPayment={(method) => {
-                analytics.trackEvent('payment_method_selected', { method: method.name });
-                setShowPaymentOptions(false);
-              }}
-              totalAmount={cartTotal}
-            />
+                          <PaymentOptions
+                onSelectPayment={(method) => {
+                  try {
+                    analytics.trackEvent('payment_method_selected', { method: method.name });
+                  } catch (error) {
+                    console.warn('Failed to track payment method selection:', error);
+                  }
+                  setShowPaymentOptions(false);
+                }}
+                totalAmount={cartTotal}
+              />
           </div>
         </div>
       )}

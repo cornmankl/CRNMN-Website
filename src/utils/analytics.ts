@@ -129,20 +129,26 @@ export class AnalyticsManager {
     console.log('Analytics Event:', event);
     
     // Example: Send to Google Analytics 4
-    if (typeof gtag !== 'undefined') {
-      gtag('event', event.name || event.type, event.properties || {});
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      try {
+        (window as any).gtag('event', event.name || event.type, event.properties || {});
+      } catch (error) {
+        console.warn('Failed to send to gtag:', error);
+      }
     }
 
-    // Example: Send to custom analytics endpoint
-    fetch('/api/analytics', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(event)
-    }).catch(error => {
-      console.error('Failed to send analytics event:', error);
-    });
+    // Example: Send to custom analytics endpoint (only in production)
+    if (process.env.NODE_ENV === 'production') {
+      fetch('/api/analytics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event)
+      }).catch(error => {
+        console.error('Failed to send analytics event:', error);
+      });
+    }
   }
 
   // Get analytics data
@@ -254,8 +260,12 @@ export class ErrorTracker {
 
 export const errorTracker = ErrorTracker.getInstance();
 
-// Initialize tracking
+// Initialize tracking safely
 if (typeof window !== 'undefined') {
-  errorTracker.init();
-  performanceMonitor.measurePageLoad();
+  try {
+    errorTracker.init();
+    performanceMonitor.measurePageLoad();
+  } catch (error) {
+    console.warn('Failed to initialize analytics:', error);
+  }
 }
