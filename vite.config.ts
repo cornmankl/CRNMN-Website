@@ -15,16 +15,15 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true,
     }),
-    // Gzip compression
-    viteCompression({
-      algorithm: 'gzip',
-      ext: '.gz',
-    }),
-    // Brotli compression
-    viteCompression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-    }),
+    // Note: Compression disabled for Vercel deployment - Vercel handles compression automatically
+    // viteCompression({
+    //   algorithm: 'gzip',
+    //   ext: '.gz',
+    // }),
+    // viteCompression({
+    //   algorithm: 'brotliCompress',
+    //   ext: '.br',
+    // }),
   ],
   define: {
     'process.env': {}
