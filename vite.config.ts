@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from "path"
 import { visualizer } from 'rollup-plugin-visualizer'
-import { compression } from 'vite-plugin-compression'
+import viteCompression from 'vite-plugin-compression'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,16 +15,15 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true,
     }),
-    // Gzip compression
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz',
-    }),
-    // Brotli compression
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-    }),
+    // Note: Compression disabled for Vercel deployment - Vercel handles compression automatically
+    // viteCompression({
+    //   algorithm: 'gzip',
+    //   ext: '.gz',
+    // }),
+    // viteCompression({
+    //   algorithm: 'brotliCompress',
+    //   ext: '.br',
+    // }),
   ],
   define: {
     'process.env': {}
