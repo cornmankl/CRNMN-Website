@@ -14,7 +14,9 @@ import {
   ArrowLeft,
   Shield,
   Key,
-  Send
+  Send,
+  Clock,
+  RefreshCw
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
@@ -34,6 +36,28 @@ export function PasswordReset({ isOpen, onClose, onBackToLogin }: PasswordResetP
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [canResend, setCanResend] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+
+  // Helper function to format time
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
+  // Timer effect for code expiration
+  React.useEffect(() => {
+    if (step === 'code' && timeLeft > 0) {
+      const timer = setTimeout(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0) {
+      setCanResend(true);
+    }
+  }, [step, timeLeft]);
 
   // Reset state when modal opens
   React.useEffect(() => {

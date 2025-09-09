@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { useCart } from '../../contexts/CartContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { api } from '../../utils/api'
-import { toast } from 'sonner@2.0.3'
+import { toast } from 'sonner'
 import { MapPin, Clock, CreditCard } from 'lucide-react'
 import { AuthModal } from '../Auth/AuthModal'
 

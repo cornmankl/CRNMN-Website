@@ -1,11 +1,8 @@
-import imgDepth7Frame0 from "figma:asset/af9d70c888955533fb7b950acf29507776094c1a.png";
-import imgDepth7Frame1 from "figma:asset/e4a4e6d169e6c1e281b41dd04be79aabdd6c39d9.png";
-import imgDepth7Frame2 from "figma:asset/2eb24312b67e2c2efd0f142c63cdb4c3790a46fa.png";
-
+// Using placeholder images instead of figma assets
 const showcaseImages = [
-  { src: imgDepth7Frame0, alt: "CRNMN Lifestyle 1" },
-  { src: imgDepth7Frame1, alt: "CRNMN Lifestyle 2" },
-  { src: imgDepth7Frame2, alt: "CRNMN Lifestyle 3" }
+  { src: "/placeholder-image-1.jpg", alt: "CRNMN Lifestyle 1" },
+  { src: "/placeholder-image-2.jpg", alt: "CRNMN Lifestyle 2" },
+  { src: "/placeholder-image-3.jpg", alt: "CRNMN Lifestyle 3" }
 ];
 
 export function BrandShowcase() {

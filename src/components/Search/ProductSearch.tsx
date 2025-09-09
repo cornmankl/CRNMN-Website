@@ -198,7 +198,7 @@ export function ProductSearch({ onAddToCart, onToggleFavorite }: ProductSearchPr
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
-    let filtered = products.filter(product => {
+    const filtered = products.filter(product => {
       // Search query
       if (searchQuery) {
         const query = searchQuery.toLowerCase();

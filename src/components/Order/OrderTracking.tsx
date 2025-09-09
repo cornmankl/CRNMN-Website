@@ -3,7 +3,7 @@ import { Card } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { CheckCircle, Clock, Utensils, Bike, MapPin } from 'lucide-react'
 import { api } from '../../utils/api'
-import { toast } from 'sonner@2.0.3'
+import { toast } from 'sonner'
 
 interface OrderTrackingProps {
   orderId: string

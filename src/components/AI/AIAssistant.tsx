@@ -3,10 +3,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { Textarea } from '../ui/textarea';
 
 import { 
   Bot, 
@@ -17,7 +16,6 @@ import {
   Settings, 
   Trash2,
   Sparkles,
-  Loader2,
   Copy,
   Check,
   X,
@@ -29,12 +27,9 @@ import {
   Share2,
   ThumbsUp,
   ThumbsDown,
-  RefreshCw,
   Zap,
   MessageSquare,
-  Image as ImageIcon,
-  Code,
-  FileText
+  Image as ImageIcon
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
