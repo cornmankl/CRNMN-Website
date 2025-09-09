@@ -4,7 +4,7 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { useAuth } from '../../contexts/AuthContext'
-import { toast } from 'sonner@2.0.3'
+import { toast } from 'sonner'
 
 interface AuthModalProps {
   isOpen: boolean
@@ -30,7 +30,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     try {
       if (isSignUp) {
-        await signUp(formData)
+        await signUp(formData.email, formData.password, formData.name)
         toast.success('Account created successfully!')
       } else {
         await signIn(formData.email, formData.password)

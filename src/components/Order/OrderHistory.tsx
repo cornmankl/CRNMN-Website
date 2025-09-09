@@ -4,7 +4,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { Eye, Package } from 'lucide-react'
 import { api } from '../../utils/api'
-import { toast } from 'sonner@2.0.3'
+import { toast } from 'sonner'
 
 interface OrderHistoryProps {
   onViewOrder: (orderId: string) => void
