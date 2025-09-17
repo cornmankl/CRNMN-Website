@@ -1,7 +1,13 @@
 // Cache utilities for better performance
+interface CacheItem<T = unknown> {
+  data: T;
+  timestamp: number;
+  ttl: number;
+}
+
 export class CacheManager {
   private static instance: CacheManager;
-  private cache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private cache = new Map<string, CacheItem>();
 
   static getInstance(): CacheManager {
     if (!CacheManager.instance) {
@@ -10,7 +16,7 @@ export class CacheManager {
     return CacheManager.instance;
   }
 
-  set(key: string, data: any, ttl: number = 300000): void { // 5 minutes default
+  set<T>(key: string, data: T, ttl: number = 300000): void { // 5 minutes default
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
@@ -18,7 +24,7 @@ export class CacheManager {
     });
   }
 
-  get(key: string): any | null {
+  get<T>(key: string): T | null {
     const item = this.cache.get(key);
     if (!item) return null;
 
@@ -27,7 +33,7 @@ export class CacheManager {
       return null;
     }
 
-    return item.data;
+    return item.data as T;
   }
 
   clear(): void {
@@ -43,7 +49,7 @@ export const cache = CacheManager.getInstance();
 
 // Local storage cache for persistent data
 export const localStorageCache = {
-  set: (key: string, data: any, ttl: number = 3600000): void => { // 1 hour default
+  set: <T>(key: string, data: T, ttl: number = 3600000): void => { // 1 hour default
     const item = {
       data,
       timestamp: Date.now(),
@@ -52,7 +58,7 @@ export const localStorageCache = {
     localStorage.setItem(key, JSON.stringify(item));
   },
 
-  get: (key: string): any | null => {
+  get: <T>(key: string): T | null => {
     try {
       const item = localStorage.getItem(key);
       if (!item) return null;

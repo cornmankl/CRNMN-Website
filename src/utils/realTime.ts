@@ -1,7 +1,9 @@
 // Real-time features using WebSocket simulation
+type EventCallback<T = unknown> = (data: T) => void;
+
 export class RealTimeManager {
   private static instance: RealTimeManager;
-  private listeners: Map<string, Set<Function>> = new Map();
+  private listeners: Map<string, Set<EventCallback>> = new Map();
   private isConnected = false;
 
   static getInstance(): RealTimeManager {
@@ -24,17 +26,17 @@ export class RealTimeManager {
     console.log('Real-time connection closed');
   }
 
-  subscribe(event: string, callback: Function): () => void {
+  subscribe<T = unknown>(event: string, callback: EventCallback<T>): () => void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
-    this.listeners.get(event)!.add(callback);
+    this.listeners.get(event)!.add(callback as EventCallback);
 
     // Return unsubscribe function
     return () => {
       const eventListeners = this.listeners.get(event);
       if (eventListeners) {
-        eventListeners.delete(callback);
+        eventListeners.delete(callback as EventCallback);
         if (eventListeners.size === 0) {
           this.listeners.delete(event);
         }
@@ -42,7 +44,7 @@ export class RealTimeManager {
     };
   }
 
-  emit(event: string, data: any): void {
+  emit<T = unknown>(event: string, data: T): void {
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
       eventListeners.forEach(callback => callback(data));

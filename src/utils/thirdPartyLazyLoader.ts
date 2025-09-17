@@ -4,7 +4,7 @@ import { Skeleton } from '../components/ui/skeleton';
 // Third-party library loading configurations
 interface LibraryConfig {
   name: string;
-  importFn: () => Promise<any>;
+  importFn: () => Promise<{ default: React.ComponentType<unknown> }>;
   placeholder?: React.ReactNode;
   priority?: 'high' | 'medium' | 'low';
   preloadCondition?: () => boolean;
@@ -84,7 +84,7 @@ export const LibraryErrorFallback: React.FC<LibraryErrorFallbackProps> = ({
 };
 
 // Lazy loading wrapper for third-party libraries
-export const createLazyLibrary = <T extends any>(
+export const createLazyLibrary = (
   config: LibraryConfig
 ) => {
   const {
@@ -108,7 +108,7 @@ export const createLazyLibrary = <T extends any>(
   );
 
   // Wrapper component with suspense and error handling
-  const LazyLibraryWrapper: React.FC<any> = (props) => {
+  const LazyLibraryWrapper: React.FC<Record<string, unknown>> = (props) => {
     const [hasError, setHasError] = React.useState(false);
     const [retryCount, setRetryCount] = React.useState(0);
     const maxRetries = 3;
@@ -125,7 +125,8 @@ export const createLazyLibrary = <T extends any>(
       if (preloadCondition && preloadCondition()) {
         importFn().catch(console.error);
       }
-    }, [preloadCondition]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (hasError && retryCount >= maxRetries) {
       return errorFallback || React.createElement(LibraryErrorFallback, { name, retry: handleRetry });

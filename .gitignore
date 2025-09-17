@@ -3,3 +3,4 @@ node_modules
 
 .gemini/
 gha-creds-*.json
+node_modules/

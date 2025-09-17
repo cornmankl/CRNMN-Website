@@ -1,5 +1,5 @@
 // Image optimization utilities
-export const optimizeImage = (src: string, width?: number, height?: number, quality: number = 80) => {
+export const optimizeImage = (src: string, width?: number, height?: number) => {
   // For now, return the original src
   // In production, you'd integrate with services like Cloudinary, ImageKit, or Next.js Image
   return src;

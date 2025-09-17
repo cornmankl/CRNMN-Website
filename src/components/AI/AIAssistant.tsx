@@ -3,10 +3,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { Textarea } from '../ui/textarea';
 
 import { 
   Bot, 
@@ -17,7 +16,6 @@ import {
   Settings, 
   Trash2,
   Sparkles,
-  Loader2,
   Copy,
   Check,
   X,
@@ -61,10 +59,14 @@ interface Message {
 interface AIAssistantProps {
   isOpen: boolean;
   onClose: () => void;
-  user?: any;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
-export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user }) => {
+export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -72,10 +74,9 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
   const [showSettings, setShowSettings] = useState(false);
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [typingMessage, setTypingMessage] = useState<Message | null>(null);
-  const [quickActions, setQuickActions] = useState([
+  const [quickActions] = useState([
     { id: 'menu', label: 'Menu Inquiry', icon: '🌽', prompt: "What's on the menu today?" },
     { id: 'order', label: 'Order Tracking', icon: '📦', prompt: "How do I track my order?" },
     { id: 'delivery', label: 'Delivery Info', icon: '🚚', prompt: "What are your delivery areas?" },
@@ -84,7 +85,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose, user 
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   
   const { 
