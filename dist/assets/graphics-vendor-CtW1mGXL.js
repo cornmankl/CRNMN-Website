@@ -1,1 +1,0 @@
-import"./ui-vendor-BH5LahJ3.js";import{a as r,g as o}from"./react-vendor-C9RBa7uG.js";var t,e={};const a=o(function(){if(t)return e;t=1;var o=r();return e.createRoot=o.createRoot,e.hydrateRoot=o.hydrateRoot,e}());export{a as R};

@@ -26,7 +26,7 @@ export const AITestPanel: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const { user } = useAIAuth();
-  const aiService = new AIService();
+  // const aiService = new AIService(); // Commented out unused variable
 
   const tests = [
     {

@@ -27,12 +27,9 @@ import {
   Share2,
   ThumbsUp,
   ThumbsDown,
-  RefreshCw,
   Zap,
   MessageSquare,
-  Image as ImageIcon,
-  Code,
-  FileText
+  Image as ImageIcon
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -141,13 +138,18 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({ isOpen, onClose }) => 
   // Initialize speech recognition
   useEffect(() => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const SpeechRecognition = (window as typeof globalThis & {
+        SpeechRecognition: new() => SpeechRecognition;
+        webkitSpeechRecognition: new() => SpeechRecognition;
+      }).SpeechRecognition || (window as typeof globalThis & {
+        webkitSpeechRecognition: new() => SpeechRecognition;
+      }).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
       recognitionRef.current.lang = 'en-US';
 
-      recognitionRef.current.onresult = (event: any) => {
+      recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[0][0].transcript;
         setInputMessage(transcript);
         setIsRecording(false);
