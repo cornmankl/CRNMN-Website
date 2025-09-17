@@ -115,8 +115,6 @@
     "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@cypress/react": "^9.0.0",
-    "@cypress/vite-dev-server": "^5.1.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
@@ -132,7 +130,6 @@
     "@typescript-eslint/parser": "^8.15.0",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.16",
-    "cypress": "^13.15.2",
     "eslint": "^8.57.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
