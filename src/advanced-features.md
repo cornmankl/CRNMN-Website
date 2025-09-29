@@ -40,7 +40,7 @@ export function SocialAuth({ provider, onSuccess, onError }: SocialAuthProps) {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${{window.location.origin}}/auth/callback`,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -316,7 +316,7 @@ export function PaymentMethodSelector({
               <div>
                 <p className="font-semibold">
                   {method.type === 'card' 
-                    ? `•••• •••• •••• ${method.last4}` 
+                    ? `•••• •••• •••• ${{method.last4}}` 
                     : method.type.replace('_', ' ').toUpperCase()
                   }
                 </p>
@@ -402,7 +402,7 @@ export async function createPaymentIntent(amount: number, currency: string = 'my
       payment_intent_id: paymentIntent.id
     }
   } catch (error) {
-    throw new Error(`Payment intent creation failed: ${error.message}`)
+    throw new Error(`Payment intent creation failed: ${{error.message}}`)
   }
 }
 
@@ -586,12 +586,12 @@ export function LiveDeliveryMap({
   useEffect(() => {
     // Subscribe to real-time driver location updates
     const subscription = supabase
-      .channel(`delivery_${orderId}`)
+      .channel(`delivery_${{orderId}}`)
       .on('postgres_changes', {
         event: 'UPDATE',
         schema: 'public',
         table: 'delivery_tracking',
-        filter: `order_id=eq.${orderId}`
+        filter: `order_id=eq.${{orderId}}`
       }, (payload) => {
         const location = payload.new as DeliveryLocation
         setDriverLocation(location)
@@ -993,7 +993,7 @@ export class FoodRecommendationEngine {
     }
 
     if (userPrefs.favoriteCategories.includes(rec.category)) {
-      reasons.push(`Perfect for ${rec.category} lovers`)
+      reasons.push(`Perfect for ${{rec.category}} lovers`)
     }
 
     if (context.weather === 'rain' && rec.category === 'hot_drinks') {
@@ -1143,7 +1143,7 @@ export function SmartSearch({ onResults }: { onResults: (items: MenuItem[]) => v
     categories.slice(0, 2).forEach(category => {
       suggestions.push({
         type: 'category',
-        text: `All ${category.name}`,
+        text: `All ${{category.name}}`,
         icon: '📂',
         action: () => searchByCategory(category.id)
       })
@@ -1476,7 +1476,7 @@ export function LoyaltyDashboard({ user }: { user: User }) {
             <h2 className="text-2xl font-bold">{currentTier.name}</h2>
             <p className="text-neutral-400">
               {loyaltyData?.points || 0} points
-              {nextTier && ` • ${nextTier.minPoints - (loyaltyData?.points || 0)} to ${nextTier.name}`}
+              {nextTier && ` • ${{nextTier.minPoints - (loyaltyData?.points || 0)}} to ${{nextTier.name}}`}
             </p>
           </div>
           <div className="text-4xl">{currentTier.badge}</div>
@@ -1492,7 +1492,7 @@ export function LoyaltyDashboard({ user }: { user: User }) {
             <div className="w-full bg-neutral-700 rounded-full h-3">
               <div 
                 className="h-3 rounded-full bg-gradient-to-r from-neon-green to-green-400 transition-all duration-500"
-                style={{ width: `${progressToNextTier * 100}%` }}
+                style={{ width: `${{progressToNextTier * 100}}%` }}
               />
             </div>
           </div>
@@ -1506,8 +1506,8 @@ export function LoyaltyDashboard({ user }: { user: User }) {
               <div>
                 <p className="font-semibold text-sm">{benefit.description}</p>
                 <p className="text-xs text-neutral-400">
-                  {benefit.type === 'discount' ? `${benefit.value}% off` :
-                   benefit.type === 'points_multiplier' ? `${benefit.value}x points` :
+                  {benefit.type === 'discount' ? `${{benefit.value}}% off` :
+                   benefit.type === 'points_multiplier' ? `${{benefit.value}}x points` :
                    benefit.value}
                 </p>
               </div>
@@ -1581,7 +1581,7 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
             className={`h-2 rounded-full transition-all duration-500 ${
               isCompleted ? 'bg-neon-green' : 'bg-blue-500'
             }`}
-            style={{ width: `${Math.min(progress, 100)}%` }}
+            style={{ width: `${{Math.min(progress, 100)}}%` }}
           />
         </div>
       </div>
@@ -1614,7 +1614,7 @@ export class ChallengeGenerator {
     challenges.push({
       id: 'weekly_orders',
       title: 'Order Streak',
-      description: `Place ${Math.ceil(avgWeeklyOrders * 1.2)} orders this week`,
+      description: `Place ${{Math.ceil(avgWeeklyOrders * 1.2)}} orders this week`,
       type: 'order_count',
       target: Math.ceil(avgWeeklyOrders * 1.2),
       current: 0,
@@ -1646,7 +1646,7 @@ export class ChallengeGenerator {
     challenges.push({
       id: 'spend_target',
       title: 'Corn Investment',
-      description: `Spend RM ${Math.ceil(avgWeeklySpend * 0.8)} this week`,
+      description: `Spend RM ${{Math.ceil(avgWeeklySpend * 0.8)}} this week`,
       type: 'spend_amount',
       target: Math.ceil(avgWeeklySpend * 0.8),
       current: 0,
@@ -1715,7 +1715,7 @@ export function BusinessAnalyticsDashboard() {
     const loadAnalytics = async () => {
       setIsLoading(true)
       try {
-        const data = await fetch(`/api/analytics/dashboard?range=${timeRange}`)
+        const data = await fetch(`/api/analytics/dashboard?range=${{timeRange}}`)
           .then(res => res.json())
         setAnalyticsData(data)
       } catch (error) {
@@ -1742,7 +1742,7 @@ export function BusinessAnalyticsDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard
           title="Revenue Today"
-          value={`RM ${analyticsData.revenue.today.toFixed(2)}`}
+          value={`RM ${{analyticsData.revenue.today.toFixed(2)}}`}
           change={calculatePercentageChange(
             analyticsData.revenue.today, 
             analyticsData.revenue.yesterday
@@ -1772,7 +1772,7 @@ export function BusinessAnalyticsDashboard() {
         
         <MetricCard
           title="Avg Delivery Time"
-          value={`${analyticsData.delivery.averageTime} min`}
+          value={`${{analyticsData.delivery.averageTime}} min`}
           change={calculatePercentageChange(
             analyticsData.delivery.averageTime,
             analyticsData.delivery.previousAverageTime
@@ -1835,7 +1835,7 @@ function RevenueChart({ data, timeRange }: { data: RevenueMetrics, timeRange: st
           <YAxis 
             stroke="#a3a3a3"
             tick={{ fontSize: 12 }}
-            tickFormatter={(value) => `RM ${value}`}
+            tickFormatter={(value) => `RM ${{value}}`}
           />
           <Tooltip 
             contentStyle={{
@@ -1843,7 +1843,7 @@ function RevenueChart({ data, timeRange }: { data: RevenueMetrics, timeRange: st
               border: '1px solid #262626',
               borderRadius: '8px'
             }}
-            formatter={(value) => [`RM ${value}`, 'Revenue']}
+            formatter={(value) => [`RM ${{value}}`, 'Revenue']}
           />
           <Line 
             type="monotone" 
@@ -2112,7 +2112,7 @@ export class ABTestingEngine {
 
   private hashUser(userId: string, experimentId: string): number {
     // Simple hash function for consistent user assignment
-    const combined = `${userId}_${experimentId}`
+    const combined = `${{userId}}_${{experimentId}}`
     let hash = 0
     for (let i = 0; i < combined.length; i++) {
       const char = combined.charCodeAt(i)
@@ -2401,7 +2401,7 @@ function ChatMessageBubble({ message }: { message: ChatMessage }) {
   const isUser = message.role === 'user'
 
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+    <div className={`flex ${{isUser ? 'justify-end' : 'justify-start'}}`}>
       <div className={`max-w-[80%] p-3 rounded-2xl ${
         isUser 
           ? 'bg-neon-green text-black ml-4' 
@@ -2552,7 +2552,7 @@ export class AIConversationService {
 
     if (foodItems.length > 0) {
       const item = foodItems[0]
-      return `Great choice! I can help you order ${quantity} ${item.value}${quantity > 1 ? 's' : ''}. Would you like to add it to your cart? The price is RM 8.90 each.`
+      return `Great choice! I can help you order ${{quantity}} ${{item.value}}${{quantity > 1 ? 's' : ''}}. Would you like to add it to your cart? The price is RM 8.90 each.`
     }
 
     return "I'd be happy to help you order! What corn dish are you in the mood for? We have classics like our CORNMAN Special Cup or something spicier like our Jalapeño Blast."
@@ -2563,7 +2563,7 @@ export class AIConversationService {
     
     if (dietary.length > 0) {
       const pref = dietary[0].value
-      return `Perfect! Based on your preference for ${pref} options, I'd recommend our ${this.getRecommendationForDietary(pref)}. It's one of our most popular ${pref} dishes!`
+      return `Perfect! Based on your preference for ${{pref}} options, I'd recommend our ${{this.getRecommendationForDietary(pref)}}. It's one of our most popular ${{pref}} dishes!`
     }
 
     // Use context for personalized recommendations
@@ -2824,7 +2824,7 @@ export class FoodVisionService {
       }
       
     } catch (error) {
-      throw new Error(`Food recognition failed: ${error.message}`)
+      throw new Error(`Food recognition failed: ${{error.message}}`)
     }
   }
 
@@ -2833,7 +2833,7 @@ export class FoodVisionService {
     const response = await fetch('https://vision.googleapis.com/v1/images:annotate', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.GOOGLE_CLOUD_API_KEY}`,
+        'Authorization': `Bearer ${{process.env.GOOGLE_CLOUD_API_KEY}}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
