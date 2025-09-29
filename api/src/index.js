@@ -30,6 +30,7 @@ import promotionsRoutes from './routes/promotions.js';
 import analyticsRoutes from './routes/analytics.js';
 import webhooksRoutes from './routes/webhooks.js';
 import partnersRoutes from './routes/partners.js';
+import cornmanRoutes from './routes/cornman.js';
 
 // Import GraphQL
 import { setupGraphQL } from './graphql/index.js';
@@ -117,6 +118,7 @@ app.use('/api', validateApiVersion);
 // Public routes (no authentication required)
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/webhooks', webhooksRoutes);
+app.use('/api/v1/cornman', cornmanRoutes);
 
 // Protected routes (authentication required)
 app.use('/api/v1/products', apiKeyAuth, productsRoutes);
