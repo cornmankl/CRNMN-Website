@@ -1,0 +1,5 @@
+# Ignore API folder for frontend deployment
+api/
+*.md
+.gitignore
+.vercelignore
