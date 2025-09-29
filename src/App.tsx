@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { ImprovedHeroSection } from './components/Home/ImprovedHeroSection';
@@ -243,7 +244,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--brand-black)] text-[var(--brand-white)]">
+    <HelmetProvider>
+      <div className="min-h-screen bg-[var(--brand-black)] text-[var(--brand-white)]">
       {/* SEO Head */}
       <SEOHead 
         title="CRNMN - Premium Corn Restaurant | Fresh Corn Dishes & More"
@@ -337,6 +339,7 @@ export default function App() {
         onShowCart={() => setCartOpen(true)}
         user={user}
       />
-    </div>
+      </div>
+    </HelmetProvider>
   );
 }

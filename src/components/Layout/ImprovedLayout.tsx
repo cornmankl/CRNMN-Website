@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ImprovedHeader } from '../Navigation/ImprovedHeader';
-import { FloatingActionMenu } from '../UI/FloatingActionMenu';
+import { FloatingActionMenu } from '../ui/FloatingActionMenu';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
