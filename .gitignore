@@ -100,3 +100,4 @@ api/.env
 # Kilocode files
 .kilocode/
 .kilocodemodes
+.vercel
