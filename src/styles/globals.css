@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 14px;
+  --neon-green: #39FF14;
+  --brand-black: #000000;
+  --brand-white: #FFFFFF;
+  --neutral-900: #171717;
+  --neutral-800: #262626;
+  --neutral-700: #404040;
+  --neutral-600: #525252;
+  --neutral-500: #737373;
+  --neutral-400: #a3a3a3;
+  --neutral-300: #d4d4d4;
+  
+  --background: var(--brand-black);
+  --foreground: var(--brand-white);
+  --card: var(--neutral-900);
+  --card-foreground: var(--brand-white);
+  --popover: var(--neutral-900);
+  --popover-foreground: var(--brand-white);
+  --primary: var(--neon-green);
+  --primary-foreground: var(--brand-black);
+  --secondary: var(--neutral-800);
+  --secondary-foreground: var(--brand-white);
+  --muted: var(--neutral-800);
+  --muted-foreground: var(--neutral-400);
+  --accent: var(--neutral-700);
+  --accent-foreground: var(--brand-white);
+  --destructive: #dc2626;
+  --destructive-foreground: var(--brand-white);
+  --border: var(--neutral-800);
+  --input: var(--neutral-800);
+  --input-background: var(--neutral-800);
+  --switch-background: var(--neutral-700);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: var(--neon-green);
+  --chart-1: var(--neon-green);
+  --chart-2: #10b981;
+  --chart-3: #06b6d4;
+  --chart-4: #8b5cf6;
+  --chart-5: #f59e0b;
+  --radius: 1rem;
+  --sidebar: var(--neutral-900);
+  --sidebar-foreground: var(--brand-white);
+  --sidebar-primary: var(--neon-green);
+  --sidebar-primary-foreground: var(--brand-black);
+  --sidebar-accent: var(--neutral-800);
+  --sidebar-accent-foreground: var(--brand-white);
+  --sidebar-border: var(--neutral-800);
+  --sidebar-ring: var(--neon-green);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--brand-black);
+    color: var(--brand-white);
+    @apply bg-background text-foreground;
+  }
+
+  .neon-text {
+    color: var(--neon-green);
+  }
+
+  .neon-bg {
+    background-color: var(--neon-green);
+  }
+
+  .neon-border {
+    border-color: var(--neon-green);
+  }
+
+  .neon-shadow {
+    box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-2xl font-semibold bg-[var(--neon-green)] text-[var(--brand-black)] transition-transform transform hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-2xl border border-[var(--neutral-800)] hover:border-[var(--neutral-600)] transition-colors;
+  }
+
+  .card {
+    @apply rounded-3xl bg-[var(--neutral-900)] border border-[var(--neutral-800)] overflow-hidden;
+  }
+
+  .tab-active {
+    @apply border-b-2 border-[var(--neon-green)] text-[var(--neon-green)];
+  }
+
+  .tab {
+    @apply py-2 px-4 text-[var(--neutral-400)] hover:text-white transition-colors;
+  }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h4 {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    p {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+
+    label {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    button {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    input {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
