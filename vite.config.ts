@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from "path"
 import { visualizer } from 'rollup-plugin-visualizer'
-import { compression } from 'vite-plugin-compression'
+import viteCompression from 'vite-plugin-compression'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,12 +16,12 @@ export default defineConfig({
       brotliSize: true,
     }),
     // Gzip compression
-    compression({
+    viteCompression({
       algorithm: 'gzip',
       ext: '.gz',
     }),
     // Brotli compression
-    compression({
+    viteCompression({
       algorithm: 'brotliCompress',
       ext: '.br',
     }),
@@ -105,7 +105,7 @@ export default defineConfig({
     assetsInlineLimit: 4096, // Inline assets smaller than 4kb
   },
   server: {
-    port: 3000,
+    port: 5173,
     // Enable HMR for better development experience
     hmr: {
       overlay: true

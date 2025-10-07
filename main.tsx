@@ -1,11 +1,14 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
-import { QueryProvider } from "./providers/QueryProvider";
+import { HelmetProvider } from "react-helmet-async";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./src/app/router/router";
+import "./src/index.css";
+import { QueryProvider } from "./src/providers/QueryProvider";
 import { ThemeProvider } from "next-themes";
-import "./react-global";
+import "./src/react-global";
 import { EnhancedErrorBoundary } from "./src/components/ui/EnhancedErrorBoundary";
+import { PWARegistration } from "./src/components/PWARegistration";
 
 // Main App Wrapper
 const AppWrapper = () => {
@@ -17,16 +20,19 @@ const AppWrapper = () => {
       }}
       resetOnPropsChange={true}
     >
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem={false}
-        disableTransitionOnChange
-      >
-        <QueryProvider>
-          <App />
-        </QueryProvider>
-      </ThemeProvider>
+      <HelmetProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            <PWARegistration />
+            <RouterProvider router={router} />
+          </QueryProvider>
+        </ThemeProvider>
+      </HelmetProvider>
     </EnhancedErrorBoundary>
   );
 };
