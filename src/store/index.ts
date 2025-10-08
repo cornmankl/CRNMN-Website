@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
 
 // User Store
 interface UserState {
@@ -15,14 +14,14 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   devtools(
     persist(
-      immer((set) => ({
+      (set) => ({
         user: null,
         isAuthenticated: false,
         isLoading: false,
         setUser: (user) => set({ user, isAuthenticated: !!user }),
         clearUser: () => set({ user: null, isAuthenticated: false }),
         setLoading: (isLoading) => set({ isLoading }),
-      })),
+      }),
       {
         name: 'user-storage',
       }
@@ -57,32 +56,36 @@ interface CartState {
 export const useCartStore = create<CartState>()(
   devtools(
     persist(
-      immer((set, get) => ({
+      (set, get) => ({
         items: [],
         isOpen: false,
         
         addItem: (item) => set((state) => {
           const existingItem = state.items.find(i => i.id === item.id);
           if (existingItem) {
-            existingItem.quantity += 1;
+            return {
+              items: state.items.map(i => 
+                i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+              )
+            };
           } else {
-            state.items.push({ ...item, quantity: 1 });
+            return { items: [...state.items, { ...item, quantity: 1 }] };
           }
         }),
         
-        removeItem: (id) => set((state) => {
-          state.items = state.items.filter(item => item.id !== id);
-        }),
+        removeItem: (id) => set((state) => ({
+          items: state.items.filter(item => item.id !== id)
+        })),
         
         updateQuantity: (id, quantity) => set((state) => {
-          const item = state.items.find(i => i.id === id);
-          if (item) {
-            if (quantity <= 0) {
-              state.items = state.items.filter(i => i.id !== id);
-            } else {
-              item.quantity = quantity;
-            }
+          if (quantity <= 0) {
+            return { items: state.items.filter(i => i.id !== id) };
           }
+          return {
+            items: state.items.map(i => 
+              i.id === id ? { ...i, quantity } : i
+            )
+          };
         }),
         
         clearCart: () => set({ items: [] }),
@@ -106,7 +109,7 @@ export const useCartStore = create<CartState>()(
           const { items } = get();
           return items.reduce((count, item) => count + item.quantity, 0);
         },
-      })),
+      }),
       {
         name: 'cart-storage',
       }
@@ -137,7 +140,7 @@ interface UIState {
 export const useUIStore = create<UIState>()(
   devtools(
     persist(
-      immer((set) => ({
+      (set) => ({
         activeSection: 'home',
         theme: 'dark',
         isMobileMenuOpen: false,
@@ -151,20 +154,20 @@ export const useUIStore = create<UIState>()(
           isMobileMenuOpen: !state.isMobileMenuOpen 
         })),
         
-        addNotification: (notification) => set((state) => {
-          state.notifications.push({
+        addNotification: (notification) => set((state) => ({
+          notifications: [...state.notifications, {
             ...notification,
             id: Date.now().toString(),
             timestamp: new Date(),
-          });
-        }),
+          }]
+        })),
         
-        removeNotification: (id) => set((state) => {
-          state.notifications = state.notifications.filter(n => n.id !== id);
-        }),
+        removeNotification: (id) => set((state) => ({
+          notifications: state.notifications.filter(n => n.id !== id)
+        })),
         
         clearNotifications: () => set({ notifications: [] }),
-      })),
+      }),
       {
         name: 'ui-storage',
         partialize: (state) => ({ 
@@ -214,29 +217,27 @@ interface OrdersState {
 
 export const useOrdersStore = create<OrdersState>()(
   devtools(
-    immer((set) => ({
+    (set) => ({
       orders: [],
       activeOrder: null,
       isLoading: false,
       
       setOrders: (orders) => set({ orders }),
       
-      addOrder: (order) => set((state) => {
-        state.orders.push(order);
-        if (!state.activeOrder) {
-          state.activeOrder = order;
-        }
-      }),
+      addOrder: (order) => set((state) => ({
+        orders: [...state.orders, order],
+        activeOrder: state.activeOrder || order
+      })),
       
       updateOrderStatus: (orderId, status) => set((state) => {
-        const order = state.orders.find(o => o.id === orderId);
-        if (order) {
-          order.status = status;
-          order.updatedAt = new Date();
-          if (state.activeOrder?.id === orderId) {
-            state.activeOrder = order;
-          }
-        }
+        const updatedOrders = state.orders.map(o => 
+          o.id === orderId ? { ...o, status, updatedAt: new Date() } : o
+        );
+        const updatedOrder = updatedOrders.find(o => o.id === orderId);
+        return {
+          orders: updatedOrders,
+          activeOrder: state.activeOrder?.id === orderId ? updatedOrder : state.activeOrder
+        };
       }),
       
       setActiveOrder: (activeOrder) => set({ activeOrder }),
@@ -244,7 +245,7 @@ export const useOrdersStore = create<OrdersState>()(
       setLoading: (isLoading) => set({ isLoading }),
       
       clearOrders: () => set({ orders: [], activeOrder: null }),
-    })),
+    }),
     { name: 'orders-store' }
   )
 );
@@ -283,7 +284,7 @@ interface ProductsState {
 
 export const useProductsStore = create<ProductsState>()(
   devtools(
-    immer((set, get) => ({
+    (set, get) => ({
       products: [],
       featuredProducts: [],
       categories: [],
@@ -312,7 +313,7 @@ export const useProductsStore = create<ProductsState>()(
           return matchesSearch && matchesCategory;
         });
       },
-    })),
+    }),
     { name: 'products-store' }
   )
 );
@@ -343,7 +344,7 @@ interface AIState {
 export const useAIStore = create<AIState>()(
   devtools(
     persist(
-      immer((set) => ({
+      (set) => ({
         recommendations: [],
         userPreferences: {
           categories: [],
@@ -355,24 +356,24 @@ export const useAIStore = create<AIState>()(
         
         setRecommendations: (recommendations) => set({ recommendations }),
         
-        updateUserPreferences: (preferences) => set((state) => {
-          Object.assign(state.userPreferences, preferences);
-        }),
+        updateUserPreferences: (preferences) => set((state) => ({
+          userPreferences: { ...state.userPreferences, ...preferences }
+        })),
         
-        addChatMessage: (message, response, type) => set((state) => {
-          state.chatHistory.push({
+        addChatMessage: (message, response, type) => set((state) => ({
+          chatHistory: [...state.chatHistory, {
             id: Date.now().toString(),
             message,
             response,
             timestamp: new Date(),
             type,
-          });
-        }),
+          }]
+        })),
         
         setAILoading: (isAILoading) => set({ isAILoading }),
         
         clearChatHistory: () => set({ chatHistory: [] }),
-      })),
+      }),
       {
         name: 'ai-storage',
         partialize: (state) => ({ 
