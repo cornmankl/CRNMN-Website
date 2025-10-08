@@ -3,3 +3,16 @@ node_modules
 
 .gemini/
 gha-creds-*.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist
+dist-ssr
+
+# Editor
+.vscode
+.idea
