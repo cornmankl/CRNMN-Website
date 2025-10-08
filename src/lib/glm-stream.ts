@@ -308,57 +308,143 @@ export const RESTAURANT_TOOLS: GLMTool[] = [
 ];
 
 /**
- * Execute tool function (implement based on your data)
+ * Execute tool function with real Supabase data
  */
 export async function executeToolFunction(
   functionName: string,
   args: Record<string, any>
 ): Promise<any> {
-  // This should be implemented based on your actual data source
-  switch (functionName) {
-    case 'get_menu_items':
-      // Return menu items from your database
-      return {
-        items: [
-          { name: 'Nasi Budak Gemok', price: 8.0, category: 'Nasi & Rice Meals' },
-          { name: 'Vietnam Roll', price: 6.0, category: 'Snacks' },
-        ],
-      };
-    
-    case 'check_allergens':
-      return {
-        item: args.item_name,
-        allergens: ['gluten', 'dairy'],
-        safe: args.allergen ? !['gluten', 'dairy'].includes(args.allergen) : false,
-      };
-    
-    case 'get_restaurant_info':
-      const info: Record<string, any> = {
-        hours: 'Open daily 10:00 AM - 10:00 PM',
-        location: 'Kuala Lumpur, Malaysia',
-        contact: '+60-123-456-789',
-        delivery: 'Available via GrabFood and Foodpanda',
-      };
-      return { [args.info_type]: info[args.info_type] };
-    
-    case 'get_price_range':
-      return {
-        items: [
-          { name: 'Kuih Manis', price: 3.8, category: 'Kuih' },
-          { name: 'Pau Sambal Bilis', price: 4.8, category: 'Snacks' },
-        ],
-      };
-    
-    case 'get_recommendations':
-      return {
-        recommendations: [
-          'Nasi Kerabu Ayam - Traditional blue rice with chicken',
-          'Vietnam Roll - Fresh and healthy option',
-        ],
-      };
-    
-    default:
-      return { error: 'Unknown function' };
+  // Import Supabase client
+  const { createClient } = await import('@supabase/supabase-js');
+  const supabase = createClient(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_ANON_KEY
+  );
+
+  try {
+    switch (functionName) {
+      case 'get_menu_items': {
+        let query = supabase.from('menu_items').select('*');
+        
+        if (args.category) {
+          query = query.eq('category', args.category);
+        }
+        
+        if (args.search) {
+          query = query.ilike('name', `%${args.search}%`);
+        }
+        
+        if (args.max_results) {
+          query = query.limit(args.max_results);
+        }
+        
+        const { data, error } = await query;
+        
+        if (error) throw error;
+        
+        return {
+          items: data || [],
+          count: data?.length || 0,
+        };
+      }
+      
+      case 'check_allergens': {
+        const { data, error } = await supabase
+          .from('menu_items')
+          .select('name, allergens, ingredients')
+          .ilike('name', `%${args.item_name}%`)
+          .single();
+        
+        if (error) throw error;
+        
+        const allergens = data?.allergens || [];
+        const isSafe = args.allergen
+          ? !allergens.includes(args.allergen.toLowerCase())
+          : true;
+        
+        return {
+          item: data?.name,
+          allergens,
+          ingredients: data?.ingredients,
+          safe: isSafe,
+        };
+      }
+      
+      case 'get_restaurant_info': {
+        const info: Record<string, any> = {
+          hours: 'Open daily 10:00 AM - 10:00 PM',
+          location: 'Kuala Lumpur, Malaysia',
+          contact: '+60-123-456-789',
+          delivery: 'Available via GrabFood and Foodpanda',
+          payment: 'Cash, Card, Touch n Go, GrabPay',
+        };
+        return { [args.info_type]: info[args.info_type] || 'Not available' };
+      }
+      
+      case 'get_price_range': {
+        const { data, error } = await supabase
+          .from('menu_items')
+          .select('*')
+          .gte('price', args.min_price)
+          .lte('price', args.max_price)
+          .order('price', { ascending: true });
+        
+        if (error) throw error;
+        
+        return {
+          items: data || [],
+          count: data?.length || 0,
+          priceRange: {
+            min: args.min_price,
+            max: args.max_price,
+          },
+        };
+      }
+      
+      case 'get_recommendations': {
+        const preferences = args.preferences.toLowerCase();
+        
+        let query = supabase.from('menu_items').select('*');
+        
+        // Filter based on preferences
+        if (preferences.includes('spicy')) {
+          query = query.contains('tags', ['spicy']);
+        }
+        if (preferences.includes('vegetarian')) {
+          query = query.contains('tags', ['vegetarian']);
+        }
+        if (preferences.includes('healthy')) {
+          query = query.contains('tags', ['healthy']);
+        }
+        
+        if (args.budget) {
+          query = query.lte('price', args.budget);
+        }
+        
+        query = query.limit(5);
+        
+        const { data, error } = await query;
+        
+        if (error) throw error;
+        
+        return {
+          recommendations: (data || []).map(item => ({
+            name: item.name,
+            price: item.price,
+            description: item.description,
+            category: item.category,
+          })),
+        };
+      }
+      
+      default:
+        return { error: 'Unknown function' };
+    }
+  } catch (error: any) {
+    console.error('Tool execution error:', error);
+    return {
+      error: error.message || 'Tool execution failed',
+    };
   }
 }
 
