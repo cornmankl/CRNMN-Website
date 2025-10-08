@@ -16,3 +16,13 @@ dist-ssr
 # Editor
 .vscode
 .idea
+
+# Old SQL files (use -correct and -fixed versions)
+supabase-schema.sql
+supabase-real-menu.sql
+
+# Supabase local dev
+supabase/
+
+# Documentation with sensitive info
+REAL_DATA_SETUP.md
